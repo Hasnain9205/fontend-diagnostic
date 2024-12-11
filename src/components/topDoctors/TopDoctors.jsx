@@ -12,7 +12,7 @@ export default function TopDoctors() {
       try {
         const res = await axiosInstance.get("/doctor/doctors-list");
         setDoctors(res.data.doctors);
-        console.log(res.data);
+        console.log(res.data.doctors);
       } catch (error) {
         console.log("get doctor error", error);
       }
@@ -41,7 +41,7 @@ export default function TopDoctors() {
         </p>
       </div>
       <div className="mt-16 flex flex-wrap gap-6 justify-center">
-        {doctors.slice(0, 9).map((doctor, index) => (
+        {doctors?.slice(0, 9).map((doctor, index) => (
           <div
             key={index}
             className="card card-compact bg-base-100 w-96 shadow-xl cursor-pointer flex-shrink-0 hover:translate-y-[-10px] transition-all duration-500"

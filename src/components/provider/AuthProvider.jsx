@@ -55,7 +55,7 @@ export const AuthProvider = (props) => {
       const { data } = await axiosInstance.get("/users/profile", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log("User profile fetched:", data); // Debugging
+      console.log("User profile fetched:", data.user); // Debugging
       setUser(data.user);
     } catch (error) {
       console.error("Error fetching profile:", error);

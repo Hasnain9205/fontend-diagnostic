@@ -45,7 +45,7 @@ export default function AllTest() {
       </p>
 
       <section className="mt-16 flex flex-wrap gap-6 justify-center">
-        {tests.slice(0, 6).map((test) => (
+        {tests?.slice(0, 6).map((test) => (
           <div
             key={test._id}
             className="card card-compact p-6 bg-base-100 w-96 shadow-xl cursor-pointer flex-shrink-0 hover:translate-y-[-10px] transition-all duration-500"

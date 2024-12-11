@@ -49,39 +49,52 @@ const MyAppointments = () => {
   };
 
   const cancelAppointment = async (appointmentId) => {
-    if (window.confirm("Are you sure you want to cancel this appointment?")) {
-      try {
-        const token = getAccessToken();
-        const response = await axiosInstance.delete(
-          `/users/appointments/${appointmentId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will not be able to recover this appointment!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, cancel it!",
+      cancelButtonText: "No, keep it",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const token = getAccessToken(); // Function to retrieve the access token
+          const response = await axiosInstance.delete(
+            `/users/appointments/${appointmentId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
 
-        setAppointments((prevAppointments) =>
-          prevAppointments.filter(
-            (appointment) => appointment._id !== appointmentId
-          )
-        );
-        Swal.fire({
-          icon: "success",
-          title: "Appointment Cancelled",
-          text: response.data.message,
-        });
-      } catch (err) {
-        setError(
-          err.response?.data?.message || "Failed to cancel appointment."
-        );
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: err.response?.data?.message || "Failed to cancel appointment.",
-        });
+          setAppointments((prevAppointments) =>
+            prevAppointments.filter(
+              (appointment) => appointment._id !== appointmentId
+            )
+          );
+
+          Swal.fire({
+            icon: "success",
+            title: "Appointment Cancelled",
+            text: response.data.message,
+          });
+        } catch (err) {
+          setError(
+            err.response?.data?.message || "Failed to cancel appointment."
+          );
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text:
+              err.response?.data?.message || "Failed to cancel appointment.",
+          });
+        }
       }
-    }
+    });
   };
 
   if (loading) return <div className="text-center">Loading...</div>;
