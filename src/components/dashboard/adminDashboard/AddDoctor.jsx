@@ -106,6 +106,7 @@ export default function AddDoctor() {
     try {
       const token = getAccessToken();
       const response = await axiosInstance.post("/admin/add-doctor", formData, {
+        "Content-Type": "application/json",
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log("data", formData);

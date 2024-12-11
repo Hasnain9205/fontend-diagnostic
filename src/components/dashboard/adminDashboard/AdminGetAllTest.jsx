@@ -2,22 +2,19 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../../../Hook/useAxios";
 import Swal from "sweetalert2";
 import { getAccessToken } from "../../../../Utils";
-import { ClipLoader } from "react-spinners";
 
 export default function AdminGetAllTest() {
-  const [tests, setTests] = useState([]); // Initialize as an empty array
+  const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentActionLoading, setCurrentActionLoading] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [currentTest, setCurrentTest] = useState(null);
 
-  // Fetch tests from the API
   const fetchTests = async () => {
     try {
       const response = await axiosInstance.get("/tests/get-all-test");
-      console.log("API Response:", response.data);
-      setTests(response.data.tests || []); // Adjust according to API response structure
+      setTests(response.data.tests || []);
     } catch (error) {
-      console.error("Error fetching tests:", error);
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -28,7 +25,6 @@ export default function AdminGetAllTest() {
     }
   };
 
-  // Handle deleting a test
   const handleDelete = async (testId) => {
     Swal.fire({
       title: "Are you sure?",
@@ -41,77 +37,82 @@ export default function AdminGetAllTest() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
+          setCurrentActionLoading(testId);
           const token = getAccessToken();
           await axiosInstance.delete(`/tests/delete-test/${testId}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           setTests((prevTests) =>
             prevTests.filter((test) => test._id !== testId)
-          ); // Avoid direct state modification
+          );
           Swal.fire("Deleted!", "The test has been deleted.", "success");
         } catch (error) {
-          console.error("Error deleting test:", error);
           Swal.fire({
             icon: "error",
             title: "Error",
             text: "Failed to delete the test.",
           });
+        } finally {
+          setCurrentActionLoading(null);
         }
       }
     });
   };
 
-  // Handle editing a test (populate the form with current data)
   const handleEdit = (test) => {
     setCurrentTest(test);
-    setIsEditing(true); // Show the update form
+    setIsEditing(true);
   };
 
-  // Handle updating a test
   const handleUpdate = async (e) => {
     e.preventDefault();
-    try {
-      const { name, category, price, description } = currentTest;
-      const updatedTest = { name, category, price, description };
+    if (!currentTest.name || !currentTest.category || currentTest.price <= 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "Validation Error",
+        text: "Please fill out all fields with valid data.",
+      });
+      return;
+    }
 
+    try {
+      setCurrentActionLoading(currentTest._id);
       const token = getAccessToken();
       const response = await axiosInstance.put(
         `/tests/update-test/${currentTest._id}`,
-        updatedTest,
+        currentTest,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
       setTests((prevTests) =>
         prevTests.map((test) =>
           test._id === currentTest._id ? response.data.test : test
         )
       );
-
       Swal.fire("Updated!", "The test has been updated.", "success");
-      setIsEditing(false); // Close the update form
+      setIsEditing(false);
+      setCurrentTest(null);
     } catch (error) {
-      console.error("Error updating test:", error);
       Swal.fire({
         icon: "error",
         title: "Error",
         text: "Failed to update the test.",
       });
+    } finally {
+      setCurrentActionLoading(null);
     }
   };
 
-  // Load tests on component mount
   useEffect(() => {
     fetchTests();
   }, []);
 
-  // Render loading or error messages if data isn't available
   if (loading) {
     return <div className="text-center">Loading...</div>;
   }
 
-  if (!Array.isArray(tests) || tests.length === 0) {
+  if (!tests.length) {
     return <div className="text-center text-gray-500">No tests available.</div>;
   }
 
@@ -138,27 +139,19 @@ export default function AdminGetAllTest() {
               <td className="border px-4 py-2">${test.price}</td>
               <td className="border px-4 py-2 text-center">
                 <button
-                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700 mr-2"
+                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700"
                   onClick={() => handleDelete(test._id)}
+                  disabled={currentActionLoading === test._id}
                 >
-                  Delete
+                  {currentActionLoading === test._id ? "Deleting..." : "Delete"}
                 </button>
               </td>
               <td className="border px-4 py-2 text-center">
                 <button
-                  type="submit"
-                  className="btn btn-square px-10   hover:text-white bg-[#47ccc8] hover:bg-blue-950 "
+                  className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700"
                   onClick={() => handleEdit(test)}
-                  disabled={loading}
                 >
-                  {loading ? (
-                    <>
-                      <ClipLoader loading={loading} size={20} />
-                      <span className="ml-2 text-black">Updating...</span>
-                    </>
-                  ) : (
-                    "Update"
-                  )}
+                  Update
                 </button>
               </td>
             </tr>
@@ -166,7 +159,6 @@ export default function AdminGetAllTest() {
         </tbody>
       </table>
 
-      {/* Update Test Form (Modal or Inline Form) */}
       {isEditing && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
@@ -190,7 +182,10 @@ export default function AdminGetAllTest() {
                   type="text"
                   value={currentTest.category}
                   onChange={(e) =>
-                    setCurrentTest({ ...currentTest, category: e.target.value })
+                    setCurrentTest({
+                      ...currentTest,
+                      category: e.target.value,
+                    })
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded"
                   required
@@ -202,9 +197,13 @@ export default function AdminGetAllTest() {
                   type="number"
                   value={currentTest.price}
                   onChange={(e) =>
-                    setCurrentTest({ ...currentTest, price: e.target.value })
+                    setCurrentTest({
+                      ...currentTest,
+                      price: parseFloat(e.target.value),
+                    })
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded"
+                  min={0.01}
                   required
                 />
               </div>
@@ -225,22 +224,19 @@ export default function AdminGetAllTest() {
               <div className="flex gap-2 justify-end">
                 <button
                   type="submit"
-                  className="btn btn-square px-10   hover:text-white bg-[#47ccc8] hover:bg-blue-950"
-                  disabled={loading}
+                  className="bg-green-500 text-white px-4 py-2 rounded"
+                  disabled={currentActionLoading === currentTest._id}
                 >
-                  {loading ? (
-                    <>
-                      <ClipLoader loading={loading} size={20} />
-                      <span className="ml-2 text-black">Saving...</span>
-                    </>
-                  ) : (
-                    "Save"
-                  )}
+                  {currentActionLoading === currentTest._id
+                    ? "Saving..."
+                    : "Save"}
                 </button>
-
                 <button
                   type="button"
-                  onClick={() => setIsEditing(false)}
+                  onClick={() => {
+                    setIsEditing(false);
+                    setCurrentTest(null);
+                  }}
                   className="bg-gray-500 text-white px-4 py-2 rounded"
                 >
                   Cancel
