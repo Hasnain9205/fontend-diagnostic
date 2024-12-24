@@ -12,7 +12,7 @@ const TestAppointment = () => {
       try {
         const token = getAccessToken();
         const response = await axiosInstance.get(
-          "/tests/get-test-appointment",
+          "/admin/get-testAppointments",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -68,6 +68,16 @@ const TestAppointment = () => {
             <thead className="bg-[#47ccc8] text-black">
               <tr>
                 <th className="px-6 py-3 text-left text-sm font-semibold text-black">
+                  Image
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-black">
+                  Patient Name
+                </th>
+
+                <th className="px-6 py-3 text-left text-sm font-semibold text-black">
+                  Phone
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-black">
                   Test Name
                 </th>
                 <th className="px-6 py-3 text-left text-sm font-semibold text-black">
@@ -90,6 +100,24 @@ const TestAppointment = () => {
             <tbody>
               {appointments?.map((appointment) => (
                 <tr key={appointment._id} className="border-b hover:bg-gray-50">
+                  <td className="px-6 py-4 text-sm text-gray-800">
+                    {appointment?.userId.profileImage ? (
+                      <img
+                        src={appointment?.userId.profileImage}
+                        alt="Doctor"
+                        className="h-16 w-16 rounded-full object-cover"
+                      />
+                    ) : (
+                      "No Image"
+                    )}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-800">
+                    {appointment?.userId.name}
+                  </td>
+
+                  <td className="px-6 py-4 text-sm text-gray-800">
+                    {appointment?.userId.phone}
+                  </td>
                   <td className="px-6 py-4 text-sm text-gray-800">
                     {appointment?.testId.name}
                   </td>
@@ -120,16 +148,6 @@ const TestAppointment = () => {
                         className="px-4 py-2 text-white bg-red-500 rounded-md hover:bg-red-700 transition-colors duration-300"
                       >
                         Cancel
-                      </button>
-                    )}
-                    {appointment.status === "completed" && (
-                      <button
-                        onClick={() =>
-                          alert("Invoice generation functionality")
-                        }
-                        className="ml-2 px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-700 transition-colors duration-300"
-                      >
-                        Generate Invoice
                       </button>
                     )}
                   </td>

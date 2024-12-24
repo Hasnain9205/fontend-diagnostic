@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/api/*"
+  to = "https://backend-diagnostic-3.onrender.com/api/:splat"
+  status = 200
+  force = true

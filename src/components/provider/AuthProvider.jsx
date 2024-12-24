@@ -63,12 +63,11 @@ export const AuthProvider = (props) => {
       if (error.response?.status === 401 || error.response?.status === 403) {
         console.log("Token is expired, attempting to refresh.");
 
-        // If the access token is expired, try to refresh it using the refresh token
         const refreshToken = getRefreshToken();
         console.log(
           "Using refresh token to refresh access token:",
           refreshToken
-        ); // Debugging
+        );
 
         if (refreshToken) {
           try {

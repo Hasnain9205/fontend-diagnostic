@@ -105,7 +105,7 @@ const Appointment = () => {
         Doctors Appointment
       </h2>
       <h1 className="text-blue-700 font-bold text-xl">
-        Total Patients: {appointments.length}
+        Total Appointments: {appointments.length}
       </h1>
       {loading ? (
         <p>Loading...</p>
@@ -116,22 +116,25 @@ const Appointment = () => {
           <table className="w-full border-collapse bg-white shadow-lg rounded-lg overflow-hidden">
             <thead className="bg-[#47ccc8]">
               <tr>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600  border border-gray-300">
+                  Image
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600  border border-gray-300">
                   Patient
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600  border border-gray-300">
                   Doctor
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600  border border-gray-300">
                   Slot Date
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600  border border-gray-300">
                   Slot Time
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600  border border-gray-300">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600  border border-gray-300">
                   Action
                 </th>
               </tr>
@@ -144,19 +147,30 @@ const Appointment = () => {
                     index % 2 === 0 ? "bg-gray-100" : "bg-white"
                   } hover:bg-blue-100`}
                 >
-                  <td className="px-6 py-4 text-sm text-gray-800">
-                    {appointment.userData?.name || "N/A"}
+                  <td className="px-4 py-2 border border-gray-300">
+                    {appointment.userId?.profileImage ? (
+                      <img
+                        src={appointment.userId.profileImage}
+                        alt="Patient"
+                        className="w-12 h-12 rounded-full"
+                      />
+                    ) : (
+                      "N/A"
+                    )}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="px-4 py-2 border border-gray-300">
+                    {appointment.userId?.name || "N/A"}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
                     {appointment.docData?.name || "N/A"}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-800">
-                    {appointment.slotDate || "N/A"}
+                  <td className="px-4 py-2 border border-gray-300">
+                    {new Date(appointment.slotDate).toLocaleDateString()}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="px-4 py-2 border border-gray-300">
                     {appointment.slotTime || "N/A"}
                   </td>
-                  <td className="px-6 py-4 text-base">
+                  <td className="px-4 py-2 border border-gray-300">
                     <span
                       className={`px-2 py-1 rounded-full text-base font-semibold ${
                         appointment.status === "completed"
@@ -169,7 +183,7 @@ const Appointment = () => {
                       {appointment.status || "Unknown"}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm flex space-x-2">
+                  <td className="px-4 py-2 border border-gray-300">
                     {appointment.status === "pending" && (
                       <button
                         onClick={() => cancelAppointment(appointment._id)}

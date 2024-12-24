@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../../../Hook/useAxios";
 import Swal from "sweetalert2";
 import { getAccessToken } from "../../../../Utils";
+import { MdDelete, MdSystemUpdateAlt } from "react-icons/md";
 
 export default function AdminGetAllTest() {
   const [tests, setTests] = useState([]);
@@ -24,7 +25,7 @@ export default function AdminGetAllTest() {
       setLoading(false);
     }
   };
-
+  console.log("dd", tests);
   const handleDelete = async (testId) => {
     Swal.fire({
       title: "Are you sure?",
@@ -123,6 +124,7 @@ export default function AdminGetAllTest() {
         <thead>
           <tr className="bg-gray-100">
             <th className="border px-4 py-2">#</th>
+            <th className="border px-4 py-2">Image</th>
             <th className="border px-4 py-2">Name</th>
             <th className="border px-4 py-2">Category</th>
             <th className="border px-4 py-2">Price</th>
@@ -134,24 +136,39 @@ export default function AdminGetAllTest() {
           {tests.map((test, index) => (
             <tr key={test._id} className="hover:bg-gray-50">
               <td className="border px-4 py-2 text-center">{index + 1}</td>
+              <td className="border px-4 py-2">
+                {test.image ? (
+                  <img
+                    src={test.image}
+                    alt="Doctor"
+                    className="h-16 w-16 rounded-full object-cover"
+                  />
+                ) : (
+                  "No Image"
+                )}
+              </td>
               <td className="border px-4 py-2">{test.name}</td>
               <td className="border px-4 py-2">{test.category}</td>
               <td className="border px-4 py-2">${test.price}</td>
               <td className="border px-4 py-2 text-center">
                 <button
-                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700"
+                  className="text-red-500  px-3 py-1 rounded hover:text-red-800"
                   onClick={() => handleDelete(test._id)}
                   disabled={currentActionLoading === test._id}
                 >
-                  {currentActionLoading === test._id ? "Deleting..." : "Delete"}
+                  {currentActionLoading === test._id ? (
+                    "Deleting..."
+                  ) : (
+                    <MdDelete className="text-2xl" />
+                  )}
                 </button>
               </td>
               <td className="border px-4 py-2 text-center">
                 <button
-                  className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700"
+                  className="text-blue-500  px-3 py-1 rounded hover:text-blue-800"
                   onClick={() => handleEdit(test)}
                 >
-                  Update
+                  <MdSystemUpdateAlt className="text-2xl" />
                 </button>
               </td>
             </tr>

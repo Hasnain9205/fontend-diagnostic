@@ -21,7 +21,7 @@ const AllAppointment = () => {
         console.error("Error fetching appointments", error);
       });
   }, []);
-
+  console.log("data..", appointments);
   const cancelAppointment = async (appointmentId) => {
     const token = getAccessToken();
     await axiosInstance
@@ -60,7 +60,13 @@ const AllAppointment = () => {
             <thead className="bg-[#47ccc8] text-black">
               <tr>
                 <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
+                  Image
+                </th>
+                <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
                   Patient
+                </th>
+                <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
+                  Phone
                 </th>
                 <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
                   Doctor
@@ -83,13 +89,27 @@ const AllAppointment = () => {
               {appointments.map((appointment) => (
                 <tr key={appointment._id} className="border-b hover:bg-gray-50">
                   <td className="px-6 py-4 text-sm text-gray-800">
-                    {appointment.userData.name}
+                    {appointment?.userId.profileImage ? (
+                      <img
+                        src={appointment?.userId.profileImage}
+                        alt="Doctor"
+                        className="h-16 w-16 rounded-full object-cover"
+                      />
+                    ) : (
+                      "No Image"
+                    )}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-800">
+                    {appointment.userId.name}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-800">
+                    {appointment.userId.phone}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-800">
                     {appointment.docData.name}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-800">
-                    {appointment.slotDate}
+                    {new Date(appointment.slotDate).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-800">
                     {appointment.slotTime}

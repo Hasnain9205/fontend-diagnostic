@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../../../Hook/useAxios";
 import Swal from "sweetalert2";
 import { getAccessToken } from "../../../../Utils";
-import { ClipLoader } from "react-spinners";
+import { MdDelete, MdSystemUpdateAlt } from "react-icons/md";
 
 export default function AllDoctor() {
   const [doctors, setDoctors] = useState([]);
@@ -65,11 +65,7 @@ export default function AllDoctor() {
 
   // Enable edit mode
   const handleEdit = (doctor) => {
-    setCurrentDoctor({
-      ...doctor,
-      slotDate: "",
-      slotTime: "",
-    });
+    setCurrentDoctor({ ...doctor, slotDate: "", slotTime: "" });
     setIsEditing(true);
   };
 
@@ -89,14 +85,11 @@ export default function AllDoctor() {
         slotTime,
       } = currentDoctor;
 
-      // Fetch existing slots and append the new one
       const existingDoctor = doctors.find(
         (doc) => doc._id === currentDoctor._id
       );
-
-      // Ensure existingDoctor.bookedSlots is an array (not null or undefined)
       const updatedSlots = [
-        ...(existingDoctor.bookedSlots || []), // Defaults to an empty array if bookedSlots is not defined
+        ...(existingDoctor.bookedSlots || []),
         { slotDate, slotTime },
       ];
 
@@ -154,117 +147,122 @@ export default function AllDoctor() {
   }
 
   return (
-    <div className="container mx-auto">
-      <h2 className="text-2xl font-bold text-center mb-4">All Doctors</h2>
-      <table className="table-auto w-full border-collapse border border-gray-200">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border px-4 py-2">#</th>
-            <th className="border px-4 py-2">Name</th>
-            <th className="border px-4 py-2">Speciality</th>
-            <th className="border px-4 py-2">Email</th>
-            <th className="border px-4 py-2">Delete</th>
-            <th className="border px-4 py-2">Update</th>
-          </tr>
-        </thead>
-        <tbody>
-          {doctors.map((doctor, index) => (
-            <tr key={doctor._id} className="hover:bg-gray-50">
-              <td className="border px-4 py-2 text-center">{index + 1}</td>
-              <td className="border px-4 py-2">{doctor.name}</td>
-              <td className="border px-4 py-2">{doctor.speciality}</td>
-              <td className="border px-4 py-2">{doctor.email}</td>
-              <td className="border px-4 py-2 text-center">
-                <button
-                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700 mr-2"
-                  onClick={() => handleDelete(doctor._id)}
-                >
-                  Delete
-                </button>
-              </td>
-              <td className="border px-4 py-2 text-center">
-                <button
-                  type="submit"
-                  className="btn btn-square px-8 py-1 hover:bg-blue-950  hover:text-white bg-[#47ccc8] rounded-lg shadow-lg flex items-center justify-center"
-                  onClick={() => handleEdit(doctor)}
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <>
-                      <ClipLoader loading={loading} size={20} />
-                      <span className="ml-2 text-black">Updating...</span>
-                    </>
-                  ) : (
-                    "Update"
-                  )}
-                </button>
-              </td>
+    <div>
+      <div className="container mx-auto mt-10">
+        <h2 className="text-2xl font-bold text-center mb-4">All Doctors</h2>
+        <table className="table-auto w-full border-collapse border border-gray-200">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="border px-4 py-2">#</th>
+              <th className="border px-4 py-2">Image</th>
+              <th className="border px-4 py-2">Name</th>
+              <th className="border px-4 py-2">Speciality</th>
+              <th className="border px-4 py-2">Email</th>
+              <th className="border px-4 py-2">Delete</th>
+              <th className="border px-4 py-2">Update</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {isEditing && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
-            <h3 className="text-xl font-bold mb-4">Update Doctor</h3>
-            <form onSubmit={handleUpdate}>
-              {/* Form Fields */}
-              {[
-                { label: "Name", field: "name", type: "text" },
-                { label: "Speciality", field: "speciality", type: "text" },
-                { label: "Email", field: "email", type: "email" },
-                { label: "Degree", field: "degree", type: "text" },
-                { label: "Experience", field: "experience", type: "text" },
-                { label: "About", field: "about", type: "text" },
-                { label: "Fees", field: "fees", type: "number" },
-                { label: "Address", field: "address", type: "text" },
-                { label: "Slot Date", field: "slotDate", type: "date" },
-                { label: "Slot Time", field: "slotTime", type: "time" },
-              ].map(({ label, field, type }) => (
-                <div className="mb-4" key={field}>
-                  <label className="block text-sm font-medium">{label}</label>
-                  <input
-                    type={type}
-                    value={currentDoctor[field] || ""}
-                    onChange={(e) =>
-                      setCurrentDoctor({
-                        ...currentDoctor,
-                        [field]: e.target.value,
-                      })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded"
-                    required
-                  />
-                </div>
-              ))}
-              <div className="flex justify-end">
-                <button
-                  type="submit"
-                  className="btn btn-square px-12 py-2 mr-2  text-white bg-[#47ccc8] rounded-lg shadow-lg flex items-center justify-center"
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <>
-                      <ClipLoader loading={loading} size={20} />
-                      <span className="ml-2 text-black">Saving...</span>
-                    </>
+          </thead>
+          <tbody>
+            {doctors.map((doctor, index) => (
+              <tr key={doctor._id} className="hover:bg-gray-50">
+                <td className="border px-4 py-2 text-center">{index + 1}</td>
+                <td className="border px-4 py-2">
+                  {doctor.profileImage ? (
+                    <img
+                      src={doctor.profileImage}
+                      alt="Doctor"
+                      className="h-16 w-16 rounded-full object-cover"
+                    />
                   ) : (
-                    "Save"
+                    "No Image"
                   )}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsEditing(false)}
-                  className="bg-gray-500 text-white px-4 py-2 rounded"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
+                </td>
+
+                <td className="border px-4 py-2">{doctor.name}</td>
+                <td className="border px-4 py-2">{doctor.speciality}</td>
+                <td className="border px-4 py-2">{doctor.email}</td>
+                <td className="border px-4 py-2 text-center">
+                  <button
+                    className="text-black text-2xl hover:text-red-500"
+                    onClick={() => handleDelete(doctor._id)}
+                  >
+                    <MdDelete />
+                  </button>
+                </td>
+                <td className="border px-4 py-2 text-center">
+                  <button
+                    className="hover:text-green-500 text-2xl"
+                    onClick={() => handleEdit(doctor)}
+                  >
+                    <MdSystemUpdateAlt />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {isEditing && (
+          <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+              <h3 className="text-xl font-bold mb-4">Update Doctor</h3>
+              <form onSubmit={handleUpdate}>
+                {[
+                  "name",
+                  "speciality",
+                  "email",
+                  "degree",
+                  "experience",
+                  "about",
+                  "fees",
+                  "address",
+                  "slotDate",
+                  "slotTime",
+                ].map((field, index) => (
+                  <div className="mb-4" key={index}>
+                    <label className="block text-sm font-medium">
+                      {field.charAt(0).toUpperCase() + field.slice(1)}
+                    </label>
+                    <input
+                      type={
+                        field.includes("Date")
+                          ? "date"
+                          : field.includes("Time")
+                          ? "time"
+                          : "text"
+                      }
+                      value={currentDoctor[field] || ""}
+                      onChange={(e) =>
+                        setCurrentDoctor({
+                          ...currentDoctor,
+                          [field]: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded"
+                      required
+                    />
+                  </div>
+                ))}
+                <div className="flex justify-end">
+                  <button
+                    type="submit"
+                    className="btn px-12 py-2 mr-2 text-white bg-[#47ccc8] rounded-lg shadow-lg"
+                  >
+                    Save
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsEditing(false)}
+                    className="bg-gray-500 text-white px-4 py-2 rounded"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

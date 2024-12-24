@@ -36,12 +36,15 @@ const DoctorList = () => {
     <div className="container mx-auto p-4">
       <h1 className="text-4xl font-bold  text-center my-6">Doctor List</h1>
       <h1 className="text-blue-700 font-bold text-xl">
-        Total Patients: {doctors.length}
+        Total Doctors: {doctors.length}
       </h1>
       <div className="mt-6">
         <table className="w-full border-collapse bg-white shadow-lg rounded-lg overflow-hidden">
           <thead className="bg-[#47ccc8]">
             <tr>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">
+                Image
+              </th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">
                 Doctor
               </th>
@@ -70,6 +73,17 @@ const DoctorList = () => {
                   index % 2 === 0 ? "bg-gray-100" : "bg-white"
                 } hover:bg-blue-100`}
               >
+                <td className="px-6 py-4 text-sm text-gray-800">
+                  {doctor?.profileImage ? (
+                    <img
+                      src={doctor.profileImage}
+                      alt="Patient"
+                      className="w-10 h-10 rounded-full"
+                    />
+                  ) : (
+                    "N/A"
+                  )}
+                </td>
                 <td className="px-6 py-4 text-sm text-gray-800">
                   {doctor.name}
                 </td>

@@ -31,14 +31,14 @@ const AllPatients = () => {
       setLoading(false);
     }
   };
-
+  console.log("dd", patients);
   useEffect(() => {
     fetchUniquePatients();
   }, []);
 
   return (
     <div className="px-6">
-      <h2 className="text-4xl font-bold text-center my-6">Unique Patients</h2>
+      <h2 className="text-4xl font-bold text-center my-6">Total Patients</h2>
       <h1 className="text-blue-700 font-bold text-xl">
         Total Patients: {patients.length}
       </h1>
@@ -53,6 +53,9 @@ const AllPatients = () => {
           <table className="w-full border-collapse bg-white shadow-lg rounded-lg overflow-hidden">
             <thead className="bg-[#47ccc8]">
               <tr>
+                <th className="py-3 px-6 text-left text-sm font-semibold">
+                  Image
+                </th>
                 <th className="py-3 px-6 text-left text-sm font-semibold">
                   Name
                 </th>
@@ -81,6 +84,17 @@ const AllPatients = () => {
                     index % 2 === 0 ? "bg-gray-100" : "bg-white"
                   } hover:bg-blue-100`}
                 >
+                  <td className="px-6 py-4 text-sm text-gray-800">
+                    {patient?.profileImage ? (
+                      <img
+                        src={patient.profileImage}
+                        alt="Patient"
+                        className="w-10 h-10 rounded-full"
+                      />
+                    ) : (
+                      "N/A"
+                    )}
+                  </td>
                   <td className="py-4 px-6 text-gray-700">
                     {patient.name || "N/A"}
                   </td>
