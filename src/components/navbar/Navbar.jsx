@@ -44,7 +44,14 @@ export default function Navbar() {
           >
             Home
           </NavLink>
-
+          <NavLink
+            to="/diagnostic"
+            className={({ isActive }) =>
+              `nav-link ${isActive ? "active-link" : ""}`
+            }
+          >
+            Diagnostics
+          </NavLink>
           <NavLink
             to="/doctors"
             className={({ isActive }) =>
@@ -135,6 +142,37 @@ export default function Navbar() {
       );
     }
 
+    if (user.role === "diagnostic") {
+      return (
+        <>
+          <NavLink
+            to="/dashboard"
+            className={({ isActive }) =>
+              `nav-link ${isActive ? "active-link" : ""}`
+            }
+          >
+            Dashboard
+          </NavLink>
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              `nav-link ${isActive ? "active-link" : ""}`
+            }
+          >
+            About
+          </NavLink>
+          <NavLink
+            to="/contact"
+            className={({ isActive }) =>
+              `nav-link ${isActive ? "active-link" : ""}`
+            }
+          >
+            Contact
+          </NavLink>
+        </>
+      );
+    }
+
     return (
       <>
         <NavLink
@@ -144,6 +182,14 @@ export default function Navbar() {
           }
         >
           Home
+        </NavLink>
+        <NavLink
+          to="/diagnostic"
+          className={({ isActive }) =>
+            `nav-link ${isActive ? "active-link" : ""}`
+          }
+        >
+          Diagnostics
         </NavLink>
         <NavLink
           to="/doctors"

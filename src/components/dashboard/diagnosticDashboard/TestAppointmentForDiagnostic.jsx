@@ -1,10 +1,15 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getAccessToken } from "../../../../Utils";
 import axiosInstance from "../../../Hook/useAxios";
+import { AuthContext } from "../../provider/AuthProvider";
+import Swal from "sweetalert2"; // Import SweetAlert2
 
-const TestAppointment = () => {
+const TestAppointmentForDiagnostic = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useContext(AuthContext);
+  const centerId = user.centerId; // Destructure centerId from URL params
+  console.log("id", centerId);
 
   // Fetch appointments on mount
   useEffect(() => {
@@ -12,7 +17,7 @@ const TestAppointment = () => {
       try {
         const token = getAccessToken();
         const response = await axiosInstance.get(
-          "/admin/get-testAppointments",
+          `/diagnostic/test-appointments/${centerId}`, // Use centerId here
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -27,7 +32,38 @@ const TestAppointment = () => {
     };
 
     fetchAppointments();
-  }, []);
+  }, [centerId]); // Ensure to re-fetch if centerId changes
+
+  const completedAppointment = async (appointmentId) => {
+    try {
+      const token = getAccessToken();
+      const response = await axiosInstance.post(
+        `/tests/completed-test/${appointmentId}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      // Use SweetAlert2 for success notification
+      Swal.fire({
+        icon: "success",
+        title: "Appointment Marked as Completed",
+        text: response.data.message,
+      });
+      setAppointments((prev) =>
+        prev.map((app) =>
+          app._id === appointmentId ? { ...app, status: "completed" } : app
+        )
+      );
+    } catch (error) {
+      console.error("Error marking appointment as completed:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Failed to Mark Appointment as Completed",
+        text: "Something went wrong, please try again.",
+      });
+    }
+  };
 
   // Cancel appointment function
   const cancelAppointment = async (appointmentId) => {
@@ -41,17 +77,25 @@ const TestAppointment = () => {
         }
       );
 
-      alert(response.data.message);
+      Swal.fire({
+        icon: "warning",
+        title: "Appointment Cancelled",
+        text: response.data.message,
+      });
       // Refresh the appointments list
       setAppointments((prevAppointments) =>
         prevAppointments.filter((app) => app._id !== appointmentId)
       );
     } catch (error) {
       console.error("Error cancelling appointment", error);
-      alert("Failed to cancel appointment");
+      Swal.fire({
+        icon: "error",
+        title: "Failed to Cancel Appointment",
+        text: "Something went wrong, please try again.",
+      });
     }
   };
-  console.log("aa", appointments);
+
   return (
     <div className="container mx-auto p-6 bg-white rounded-lg shadow-xl mt-6">
       <h2 className="text-3xl font-semibold text-center text-gray-800 mb-8">
@@ -73,7 +117,6 @@ const TestAppointment = () => {
                 <th className="px-6 py-3 text-left text-sm font-semibold text-black">
                   Patient Name
                 </th>
-
                 <th className="px-6 py-3 text-left text-sm font-semibold text-black">
                   Phone
                 </th>
@@ -104,7 +147,7 @@ const TestAppointment = () => {
                     {appointment?.userId.profileImage ? (
                       <img
                         src={appointment?.userId.profileImage}
-                        alt="Doctor"
+                        alt="Patient"
                         className="h-16 w-16 rounded-full object-cover"
                       />
                     ) : (
@@ -142,14 +185,26 @@ const TestAppointment = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-sm">
-                    {appointment.status === "pending" && (
+                    {(appointment.status === "pending" && (
                       <button
                         onClick={() => cancelAppointment(appointment._id)}
                         className="px-4 py-2 text-white bg-red-500 rounded-md hover:bg-red-700 transition-colors duration-300"
                       >
                         Cancel
                       </button>
-                    )}
+                    )) ||
+                      (appointment.paymentStatus === "paid" &&
+                        appointment.status !== "completed" && (
+                          <button
+                            onClick={() =>
+                              completedAppointment(appointment._id)
+                            }
+                            className="px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-700 transition-colors duration-300"
+                            disabled={appointment.status === "completed"}
+                          >
+                            Completed
+                          </button>
+                        ))}
                   </td>
                 </tr>
               ))}
@@ -161,4 +216,4 @@ const TestAppointment = () => {
   );
 };
 
-export default TestAppointment;
+export default TestAppointmentForDiagnostic;

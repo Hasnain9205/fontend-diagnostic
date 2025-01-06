@@ -31,7 +31,11 @@ export default function Login() {
       });
 
       const redirectPath =
-        userRole === "admin" || userRole === "doctor" ? "/dashboard" : from;
+        userRole === "admin" ||
+        userRole === "doctor" ||
+        userRole === "diagnostic"
+          ? "/dashboard"
+          : from;
 
       navigate(redirectPath, { replace: true });
     } catch (error) {

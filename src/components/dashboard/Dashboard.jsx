@@ -1,11 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../provider/AuthProvider";
 import { useNavigate } from "react-router-dom";
-import AddDoctor from "./adminDashboard/AddDoctor";
 import AllDoctor from "./adminDashboard/AllDoctor";
 import AdminDashboard from "./adminDashboard/AdminDashboard";
 import AllTest from "./adminDashboard/AdminGetAllTest";
-import { AddTest } from "./adminDashboard/AddTest";
 import AllAppointment from "./adminDashboard/AllAppointment";
 import ManageRole from "./adminDashboard/ManageRole";
 import TestAppointment from "./adminDashboard/TestAppointment";
@@ -14,39 +12,122 @@ import Appointment from "./doctorDashboard/Appointment";
 import DoctorList from "./doctorDashboard/DoctorList";
 import AllPatients from "./doctorDashboard/AllPatients";
 import { GiTestTubes } from "react-icons/gi";
+import { BiSolidDashboard } from "react-icons/bi";
+import { LuTestTubes } from "react-icons/lu";
+import { FaNoteSticky } from "react-icons/fa6";
+import { BsFileEarmarkTextFill } from "react-icons/bs";
+import { ImUsers } from "react-icons/im";
 
 import {
   FaHome,
   FaUserMd,
-  FaClipboardList,
   FaCalendarCheck,
   FaUserShield,
   FaUsers,
 } from "react-icons/fa";
 import { BiTestTube } from "react-icons/bi";
+import AddDiagnostic from "./adminDashboard/AddDiagnostic";
+import { DiagnosticDashboard } from "./diagnosticDashboard/DiagnosticDashboard";
+import AllDiagnosticsAdmin from "./adminDashboard/AllDiagnosticsAdmin";
+import { AddTest } from "./diagnosticDashboard/AddTest";
+import GetTests from "./diagnosticDashboard/GetTests";
+import AddDoctor from "./diagnosticDashboard/AddDoctor";
+import GetDoctor from "./diagnosticDashboard/GetDoctor";
+import TestAppointmentForDiagnostic from "./diagnosticDashboard/TestAppointmentForDiagnostic";
 
 const rolePages = {
   admin: {
-    adminDashboard: { component: <AdminDashboard />, icon: <FaHome /> },
-    addDoctor: { component: <AddDoctor />, icon: <FaUserMd /> },
-    allDoctors: { component: <AllDoctor />, icon: <FaUserMd /> },
-    addTest: { component: <AddTest />, icon: <BiTestTube /> },
-    AllTest: { component: <AllTest />, icon: <GiTestTubes /> },
+    adminDashboard: {
+      component: <AdminDashboard />,
+      icon: <FaHome />,
+      label: "Admin Dashboard",
+    },
+
+    allDoctors: {
+      component: <AllDoctor />,
+      icon: <FaUserMd />,
+      label: "All Doctors",
+    },
+    AllTest: {
+      component: <AllTest />,
+      icon: <GiTestTubes />,
+      label: "All Tests",
+    },
     testAppointment: {
       component: <TestAppointment />,
       icon: <FaCalendarCheck />,
+      label: "Test Appointments",
+    },
+
+    manageRoles: {
+      component: <ManageRole />,
+      icon: <FaUserShield />,
+      label: "Manage Roles",
+    },
+    addDiagnostic: { component: <AddDiagnostic />, label: "Add Diagnostic" },
+    allDiagnosticsAdmin: {
+      component: <AllDiagnosticsAdmin />,
+      label: "All Diagnostics",
+    },
+  },
+  doctor: {
+    doctorDashboard: {
+      component: <DoctorDashboard />,
+      icon: <FaHome />,
+      label: "Doctor Dashboard",
+    },
+    appointment: {
+      component: <Appointment />,
+      icon: <FaCalendarCheck />,
+      label: "Appointments",
+    },
+    doctorList: {
+      component: <DoctorList />,
+      icon: <FaUserMd />,
+      label: "Doctor List",
+    },
+    allPatients: {
+      component: <AllPatients />,
+      icon: <FaUsers />,
+      label: "All Patients",
+    },
+  },
+  diagnostic: {
+    diagnosticDashboard: {
+      component: <DiagnosticDashboard />,
+      icon: <BiSolidDashboard />,
+      label: "Diagnostic Dashboard",
+    },
+    addTest: {
+      component: <AddTest />,
+      icon: <BiTestTube />,
+      label: "Add Test",
+    },
+    getTests: {
+      component: <GetTests />,
+      icon: <LuTestTubes />,
+      label: "All Tests",
+    },
+    testAppointment: {
+      component: <TestAppointmentForDiagnostic />,
+      icon: <FaNoteSticky />,
+      label: "Test Appointment",
+    },
+    addDoctor: {
+      component: <AddDoctor />,
+      icon: <FaUserMd />,
+      label: "Add Doctor",
+    },
+    getDoctor: {
+      component: <GetDoctor />,
+      icon: <ImUsers />,
+      label: "All Doctor",
     },
     allAppointments: {
       component: <AllAppointment />,
-      icon: <FaClipboardList />,
+      icon: <BsFileEarmarkTextFill />,
+      label: "Doctor Appointments",
     },
-    manageRoles: { component: <ManageRole />, icon: <FaUserShield /> },
-  },
-  doctor: {
-    doctorDashboard: { component: <DoctorDashboard />, icon: <FaHome /> },
-    appointment: { component: <Appointment />, icon: <FaCalendarCheck /> },
-    doctorList: { component: <DoctorList />, icon: <FaUserMd /> },
-    allPatients: { component: <AllPatients />, icon: <FaUsers /> },
   },
 };
 
@@ -61,23 +142,34 @@ export default function Dashboard() {
         setCurrentPage("adminDashboard");
       } else if (user.role === "doctor") {
         setCurrentPage("doctorDashboard");
+      } else if (user.role === "diagnostic") {
+        setCurrentPage("diagnosticDashboard");
       } else {
         navigate("/login");
       }
     }
   }, [user, loading, navigate]);
 
+  useEffect(() => {
+    document.title = currentPage
+      ? `${currentPage.replace(/([A-Z])/g, " $1")} - Dashboard`
+      : "Dashboard";
+  }, [currentPage]);
+
   const renderContent = () => {
-    if (user && user.role && rolePages[user.role]) {
-      return rolePages[user.role][currentPage]?.component;
+    if (!user || !user.role || !rolePages[user.role]) {
+      return <div>Access denied. Please contact the administrator.</div>;
     }
-    return <div>Invalid role or no page selected</div>;
+    if (!rolePages[user.role][currentPage]) {
+      return <div>Page not found for the current role.</div>;
+    }
+    return rolePages[user.role][currentPage]?.component;
   };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="loader"></div>
+        <div className="loader">Loading, please wait...</div>
       </div>
     );
   }
@@ -92,8 +184,8 @@ export default function Dashboard() {
         <div className="flex flex-col items-center p-6">
           <img
             className="w-24 h-24 rounded-full shadow-md"
-            src={user?.profileImage || "path/to/default/image.png"}
-            alt="Profile"
+            src={user?.profileImage || "/default-profile.png"}
+            alt={user?.name || "User Profile"}
           />
           <h2 className="mt-4 text-lg font-semibold text-gray-800 dark:text-gray-200">
             {user?.name}
@@ -103,27 +195,23 @@ export default function Dashboard() {
           </p>
         </div>
         <nav className="mt-6">
-          {Object.entries(rolePages[user.role]).map(([page, { icon }]) => (
-            <button
-              key={page}
-              onClick={() => setCurrentPage(page)}
-              className={`flex items-center px-4 py-2 mt-2 text-gray-700 transition-transform duration-200 rounded-md hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700 ${
-                currentPage === page
-                  ? "bg-gray-300 dark:bg-gray-700"
-                  : "bg-transparent"
-              }`}
-            >
-              {icon}
-              <span className="ml-4 font-medium">
-                {page
-                  .replace(/([A-Z])/g, " $1")
-                  .replace(/^\w/, (c) => c.toUpperCase())
-                  .split(" ")
-                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                  .join(" ")}
-              </span>
-            </button>
-          ))}
+          {Object.entries(rolePages[user.role]).map(
+            ([page, { icon, label }]) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`flex items-center px-4 py-2 mt-2 text-gray-700 transition-transform duration-200 rounded-md hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700 ${
+                  currentPage === page
+                    ? "bg-blue-500 text-white"
+                    : "bg-transparent"
+                }`}
+                aria-label={`Navigate to ${label}`}
+              >
+                {icon}
+                <span className="ml-4 font-medium">{label}</span>
+              </button>
+            )
+          )}
         </nav>
       </aside>
 

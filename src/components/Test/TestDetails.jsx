@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import axiosInstance from "../../Hook/useAxios";
 import { getAccessToken } from "../../../Utils";
+import { AuthContext } from "../provider/AuthProvider";
 
 const TestDetails = () => {
+  const { user } = useContext(AuthContext);
   const { testId } = useParams(); // Fetch testId from URL params
   const navigate = useNavigate();
   const [test, setTest] = useState(null);
@@ -35,7 +37,8 @@ const TestDetails = () => {
 
     fetchTestDetails();
   }, [testId, navigate]);
-
+  const centerId = test?.centerId;
+  console.log("testsssssss", centerId);
   const bookTest = async () => {
     const { value: formValues } = await Swal.fire({
       title: "Book Test Appointment",
@@ -59,7 +62,7 @@ const TestDetails = () => {
 
     try {
       const token = getAccessToken();
-      const userId = localStorage.getItem("userId");
+      const userId = user._id;
       if (!userId) {
         Swal.fire({
           icon: "warning",
@@ -71,7 +74,7 @@ const TestDetails = () => {
 
       const response = await axiosInstance.post(
         "/tests/book-test",
-        { testId, userId, appointmentDate, appointmentTime },
+        { testId, userId, centerId, appointmentDate, appointmentTime },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 

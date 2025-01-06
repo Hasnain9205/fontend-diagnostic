@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axiosInstance from "../../../Hook/useAxios";
 import Swal from "sweetalert2";
 import { getAccessToken } from "../../../../Utils";
 import { ClipLoader } from "react-spinners";
+import { AuthContext } from "../../provider/AuthProvider";
 
 export default function AddDoctor() {
+  const { user } = useContext(AuthContext);
+  const centerId = user.centerId;
+  console.log("centerId", centerId);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -13,10 +17,14 @@ export default function AddDoctor() {
     speciality: "",
     degree: "",
     experience: "",
-    about: "",
     fees: "",
     address: "",
     availableSlots: [],
+    district: "",
+    upazila: "",
+    phone: "",
+    services: [],
+    website: "",
   });
 
   const [slot, setSlot] = useState({
@@ -105,10 +113,14 @@ export default function AddDoctor() {
     console.log("Form Data before submission:", formData);
     try {
       const token = getAccessToken();
-      const response = await axiosInstance.post("/admin/add-doctor", formData, {
-        "Content-Type": "application/json",
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axiosInstance.post(
+        "/diagnostic/add-doctor",
+        { ...formData, centerId },
+        {
+          "Content-Type": "application/json",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       console.log("data", formData);
       if (response.data.success) {
         Swal.fire("Success", "Doctor added successfully", "success");
@@ -120,10 +132,14 @@ export default function AddDoctor() {
           speciality: "",
           degree: "",
           experience: "",
-          about: "",
           fees: "",
           address: "",
           slots_booked: [],
+          district: "",
+          upazila: "",
+          phone: "",
+          services: [],
+          website: "",
         });
       } else {
         const errorMessage = setErrorMessage(response.data.message);
@@ -217,111 +233,154 @@ export default function AddDoctor() {
           {loading && <p className="text-gray-500 mt-2">Uploading image...</p>}
         </div>
 
-        <div className="mb-4">
-          <label
-            htmlFor="speciality"
-            className="block text-gray-700 dark:text-gray-300"
-          >
-            Specialty
-          </label>
-          <input
-            type="text"
-            id="speciality"
-            name="speciality"
-            value={formData.speciality}
-            onChange={handleInputChange}
-            className="mt-1 p-2 w-full border rounded-lg"
-            required
-          />
+        <div className="flex gap-10">
+          <div className="mb-4 flex-1">
+            <label
+              htmlFor="speciality"
+              className="block text-gray-700 dark:text-gray-300"
+            >
+              Specialty
+            </label>
+            <input
+              type="text"
+              id="speciality"
+              name="speciality"
+              value={formData.speciality}
+              onChange={handleInputChange}
+              className="mt-1 p-2 w-full border rounded-lg"
+              required
+            />
+          </div>
+
+          <div className="mb-4 flex-1">
+            <label
+              htmlFor="degree"
+              className="block text-gray-700 dark:text-gray-300"
+            >
+              Degree
+            </label>
+            <input
+              type="text"
+              id="degree"
+              name="degree"
+              value={formData.degree}
+              onChange={handleInputChange}
+              className="mt-1 p-2 w-full border rounded-lg"
+              required
+            />
+          </div>
         </div>
 
-        <div className="mb-4">
-          <label
-            htmlFor="degree"
-            className="block text-gray-700 dark:text-gray-300"
-          >
-            Degree
-          </label>
-          <input
-            type="text"
-            id="degree"
-            name="degree"
-            value={formData.degree}
-            onChange={handleInputChange}
-            className="mt-1 p-2 w-full border rounded-lg"
-            required
-          />
+        <div className="flex gap-10">
+          <div className="mb-4 flex-1">
+            <label
+              htmlFor="experience"
+              className="block text-gray-700 dark:text-gray-300"
+            >
+              Experience
+            </label>
+            <input
+              type="text"
+              id="experience"
+              name="experience"
+              value={formData.experience}
+              onChange={handleInputChange}
+              className="mt-1 p-2 w-full border rounded-lg"
+              required
+            />
+          </div>
+
+          <div className="mb-4 flex-1">
+            <label
+              htmlFor="fees"
+              className="block text-gray-700 dark:text-gray-300"
+            >
+              Fees
+            </label>
+            <input
+              type="number"
+              id="fees"
+              name="fees"
+              value={formData.fees}
+              onChange={handleInputChange}
+              className="mt-1 p-2 w-full border rounded-lg"
+              required
+            />
+          </div>
         </div>
 
-        <div className="mb-4">
-          <label
-            htmlFor="experience"
-            className="block text-gray-700 dark:text-gray-300"
-          >
-            Experience
-          </label>
-          <input
-            type="text"
-            id="experience"
-            name="experience"
-            value={formData.experience}
-            onChange={handleInputChange}
-            className="mt-1 p-2 w-full border rounded-lg"
-            required
-          />
-        </div>
+        <div className="flex gap-10">
+          <div className="mb-4 flex-1">
+            <label
+              htmlFor="experience"
+              className="block text-gray-700 dark:text-gray-300"
+            >
+              District
+            </label>
+            <input
+              type="text"
+              id="district"
+              name="district"
+              value={formData.district}
+              onChange={handleInputChange}
+              className="mt-1 p-2 w-full border rounded-lg"
+              required
+            />
+          </div>
 
-        <div className="mb-4">
-          <label
-            htmlFor="about"
-            className="block text-gray-700 dark:text-gray-300"
-          >
-            About
-          </label>
-          <textarea
-            id="about"
-            name="about"
-            value={formData.about}
-            onChange={handleInputChange}
-            className="mt-1 p-2 w-full border rounded-lg"
-            rows="4"
-          />
+          <div className="mb-4 flex-1">
+            <label
+              htmlFor="fees"
+              className="block text-gray-700 dark:text-gray-300"
+            >
+              Upazila
+            </label>
+            <input
+              type="text"
+              id="upazila"
+              name="upazila"
+              value={formData.upazila}
+              onChange={handleInputChange}
+              className="mt-1 p-2 w-full border rounded-lg"
+              required
+            />
+          </div>
         </div>
-
-        <div className="mb-4">
-          <label
-            htmlFor="fees"
-            className="block text-gray-700 dark:text-gray-300"
-          >
-            Fees
-          </label>
-          <input
-            type="number"
-            id="fees"
-            name="fees"
-            value={formData.fees}
-            onChange={handleInputChange}
-            className="mt-1 p-2 w-full border rounded-lg"
-            required
-          />
-        </div>
-
-        <div className="mb-4">
-          <label
-            htmlFor="address"
-            className="block text-gray-700 dark:text-gray-300"
-          >
-            Address
-          </label>
-          <input
-            type="text"
-            id="address"
-            name="address"
-            value={formData.address}
-            onChange={handleInputChange}
-            className="mt-1 p-2 w-full border rounded-lg"
-            required
-          />
+        <div className="flex gap-10">
+          <div className="mb-4 flex-1">
+            <label
+              htmlFor="address"
+              className="block text-gray-700 dark:text-gray-300"
+            >
+              Address
+            </label>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
+              className="mt-1 p-2 w-full border rounded-lg"
+              required
+            />
+          </div>
+          <div className="mb-4 flex-1">
+            <label
+              htmlFor="address"
+              className="block text-gray-700 dark:text-gray-300"
+            >
+              Chamber
+            </label>
+            <input
+              type="text"
+              id="chamber"
+              name="chamber"
+              value={formData.chamber}
+              onChange={handleInputChange}
+              className="mt-1 p-2 w-full border rounded-lg"
+              required
+            />
+          </div>
         </div>
 
         <h3>Available Slots</h3>

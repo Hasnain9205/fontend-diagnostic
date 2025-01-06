@@ -1,7 +1,7 @@
 import { FaArrowRight } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { departmentsData } from "./import";
-
+console.log("spe", departmentsData);
 export default function Departments() {
   return (
     <div id="Speciality" className="mt-20">
@@ -20,9 +20,13 @@ export default function Departments() {
             timely results for all your diagnostic needs.
           </p>
           <div className="mt-6 flex items-center justify-center">
-            <button className="bg-blue-900 text-white hover:bg-white hover:text-black transition duration-200 text-xl font-bold px-6 py-4 rounded-full flex items-center justify-center gap-2">
+            <Link
+              onClick={() => scroll(0, 0)}
+              to={`/diagnostic`}
+              className="bg-blue-900 text-white hover:bg-white hover:text-black transition duration-200 text-xl font-bold px-6 py-4 rounded-full flex items-center justify-center gap-2"
+            >
               Choose Diagnostic <FaArrowRight />
-            </button>
+            </Link>
           </div>
         </div>
         <div className="bg-gray-200 p-8 rounded-md">

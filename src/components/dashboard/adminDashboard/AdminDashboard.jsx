@@ -36,17 +36,18 @@ export default function AdminDashboard() {
     const fetchDashboardData = async () => {
       try {
         const token = getAccessToken();
+        if (!token) {
+          navigate("/login");
+          return;
+        }
         const response = await axiosInstance.get("/admin/dashboard", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setDashboardData(response.data.dashData);
       } catch (err) {
         console.error("Failed to fetch dashboard data:", err);
-        if (err.response?.status === 401) {
-          navigate("/login");
-        } else {
-          setError("Unable to fetch dashboard data. Please try again.");
-        }
+
+        setError("Unable to fetch dashboard data. Please try again.");
       } finally {
         setLoading(false);
       }

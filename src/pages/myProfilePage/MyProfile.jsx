@@ -53,7 +53,16 @@ export default function MyProfile() {
               <h1>Address:</h1>
             </div>
 
-            <p className="text-center text-gray-600">{user.address || "N/A"}</p>
+            <p className="text-center text-gray-600">
+              {typeof user.address === "object" ? (
+                <>
+                  {user.address.line1 && <span>{user.address.line1}</span>}
+                  {user.address.line2 && <span>, {user.address.line2}</span>}
+                </>
+              ) : (
+                user.address || "N/A"
+              )}
+            </p>
           </div>
         </div>
       </section>

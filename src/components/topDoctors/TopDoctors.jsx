@@ -41,7 +41,7 @@ export default function TopDoctors() {
         </p>
       </div>
       <div className="mt-16 flex flex-wrap gap-6 justify-center">
-        {doctors?.slice(0, 9).map((doctor, index) => (
+        {doctors?.slice(0, 6).map((doctor, index) => (
           <div
             key={index}
             className="card card-compact bg-base-100 w-96 shadow-xl cursor-pointer flex-shrink-0 hover:translate-y-[-10px] transition-all duration-500"

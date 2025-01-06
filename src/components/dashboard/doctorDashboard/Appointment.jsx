@@ -1,17 +1,19 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MdCancel, MdCheckCircle } from "react-icons/md"; // Import icons
 import axiosInstance from "../../../Hook/useAxios";
 import { getAccessToken } from "../../../../Utils";
 import Swal from "sweetalert2";
+import { AuthContext } from "../../provider/AuthProvider";
 
 const Appointment = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useContext(AuthContext);
 
   const fetchAppointmentData = async () => {
     try {
       const token = getAccessToken();
-      const docId = localStorage.getItem("userId");
+      const docId = user._id;
 
       const response = await axiosInstance.get("/doctor/appointment-doctor", {
         headers: {

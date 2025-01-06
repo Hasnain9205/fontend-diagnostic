@@ -1,19 +1,22 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import axiosInstance from "../../Hook/useAxios";
 import Swal from "sweetalert2";
 import { getAccessToken } from "../../../Utils";
+import { AuthContext } from "../provider/AuthProvider";
 
 export default function Appointments() {
-  const { docId } = useParams(); // Extract docId from URL
+  const { user } = useContext(AuthContext);
+  const { docId } = useParams(); // Extract docId and centerId from URL
   const [doctor, setDoctor] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [availableSlots, setAvailableSlots] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const location = useLocation();
+  const { centerId } = location.state || {}; // Access centerId
 
-  // Fetch doctor details on mount
   useEffect(() => {
     const fetchDoctorDetails = async () => {
       try {
@@ -39,15 +42,12 @@ export default function Appointments() {
   const handleDateChange = (e) => {
     setSelectedDate(e.target.value);
     setSelectedTime(""); // Reset selected time when date changes
-    console.log("Selected Date: ", e.target.value); // Debugging log
   };
 
   const handleTimeChange = (e) => {
     setSelectedTime(e.target.value);
-    console.log("Selected Time: ", e.target.value); // Debugging log
   };
 
-  // Handle the appointment booking
   const handleBooking = async () => {
     if (!selectedDate || !selectedTime) {
       Swal.fire({
@@ -58,7 +58,6 @@ export default function Appointments() {
       return;
     }
 
-    // Confirm before booking
     const confirmBooking = await Swal.fire({
       icon: "question",
       title: "Are you sure?",
@@ -73,13 +72,13 @@ export default function Appointments() {
     try {
       const token = getAccessToken();
 
-      // Send booking request
       const response = await axiosInstance.post(
         `/users/book-appointment`,
         {
-          userId: localStorage.getItem("userId"),
+          userId: user._id,
           docId,
-          slotDate: selectedDate, // Send the formatted date
+          centerId: centerId.centerId, // Include centerId in the booking payload
+          slotDate: selectedDate,
           slotTime: selectedTime,
         },
         {
@@ -94,7 +93,6 @@ export default function Appointments() {
           text: "Appointment booked successfully.",
         });
 
-        // Mark the slot as booked in the UI
         setAvailableSlots((prevSlots) =>
           prevSlots.map((slot) =>
             slot.slotDate === selectedDate && slot.slotTime === selectedTime
@@ -119,13 +117,18 @@ export default function Appointments() {
       });
     }
   };
+  console.log({
+    userId: user._id,
+    docId,
+    centerId,
+    slotDate: selectedDate,
+    slotTime: selectedTime,
+  });
 
-  // Display loading message while fetching doctor details
   if (loading) {
-    return <p>Loading doctor details...</p>; // You could replace this with a skeleton loader for better UX
+    return <p>Loading doctor details...</p>;
   }
 
-  // Display error message if doctor details could not be fetched
   if (error) {
     return (
       <div className="text-center text-red-600">
@@ -134,11 +137,6 @@ export default function Appointments() {
     );
   }
 
-  // Log the selectedDate and selectedTime to check if they are set properly
-  console.log("Selected Date:", selectedDate);
-  console.log("Selected Time:", selectedTime);
-
-  // Render the appointment booking form and doctor details
   return (
     <div className="container mx-auto p-6">
       <div className="bg-white shadow rounded-lg p-8 flex flex-col md:flex-row gap-8">

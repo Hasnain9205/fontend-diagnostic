@@ -18,7 +18,8 @@ export default function Register() {
     const password = form.password.value;
     const address = form.address.value;
     const gender = form.gender.value;
-    const dob = form.dob.value;
+    const district = form.district.value;
+    const upazila = form.upazila.value;
     const phone = form.phone.value;
     const profileImage = form.profileImage.files[0];
 
@@ -28,7 +29,8 @@ export default function Register() {
     formData.append("password", password);
     formData.append("address", address);
     formData.append("gender", gender);
-    formData.append("dob", dob);
+    formData.append("district", district);
+    formData.append("upazila", upazila);
     formData.append("phone", phone);
     if (profileImage) formData.append("profileImage", profileImage);
 
@@ -127,6 +129,36 @@ export default function Register() {
             </div>
             <div className="flex gap-4">
               <div className="form-control mb-4 flex-1">
+                <label className="label-text font-medium">District</label>
+                <input
+                  type="text"
+                  name="district"
+                  className="input input-bordered p-4 rounded-lg w-full shadow-md"
+                  required
+                />
+              </div>
+              <div className="form-control mb-4 flex-1">
+                <label className="label-text font-medium">Upazila</label>
+                <input
+                  type="text"
+                  name="upazila"
+                  className="input input-bordered p-4 rounded-lg w-full shadow-md"
+                  required
+                />
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <div className="form-control mb-4 flex-1">
+                <label className="label-text font-medium">Phone Number</label>
+                <input
+                  type="text"
+                  name="phone"
+                  placeholder="Enter your phone number"
+                  className="input input-bordered p-4 rounded-lg w-full shadow-md"
+                  required
+                />
+              </div>
+              <div className="form-control mb-4 flex-1">
                 <label className="label-text font-medium">Gender</label>
                 <select
                   name="gender"
@@ -140,25 +172,6 @@ export default function Register() {
                   <option value="Other">Other</option>
                 </select>
               </div>
-              <div className="form-control mb-4 flex-1">
-                <label className="label-text font-medium">Date of Birth</label>
-                <input
-                  type="date"
-                  name="dob"
-                  className="input input-bordered p-4 rounded-lg w-full shadow-md"
-                  required
-                />
-              </div>
-            </div>
-            <div className="form-control mb-4">
-              <label className="label-text font-medium">Phone Number</label>
-              <input
-                type="text"
-                name="phone"
-                placeholder="Enter your phone number"
-                className="input input-bordered p-4 rounded-lg w-full shadow-md"
-                required
-              />
             </div>
             <div className="form-control mb-4">
               <label className="label-text font-medium">Profile Image</label>

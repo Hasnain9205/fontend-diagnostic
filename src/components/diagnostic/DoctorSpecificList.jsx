@@ -1,40 +1,24 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getAccessToken } from "../../../Utils";
-import useAxios from "../../Hook/useAxios";
-import Swal from "sweetalert2";
 
-export default function Doctors() {
-  const [doctors, setDoctors] = useState([]);
-  const [filteredDoctors, setFilteredDoctors] = useState([]);
+const DoctorSpecificList = () => {
+  const { state: doctors = [] } = useLocation();
+  const navigate = useNavigate();
   const { speciality } = useParams();
+  const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [district, setDistrict] = useState("");
   const [upazila, setUpazila] = useState("");
-  const navigate = useNavigate();
-
-  // Fetch all doctors
-  const fetchDoctors = async () => {
-    try {
-      setLoading(true);
-      const res = await useAxios.get("/doctor/doctors-list");
-      setDoctors(res.data.doctors);
-      setFilteredDoctors(res.data.doctors);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Failed to fetch doctors. Please try again.",
-      });
-    }
-  };
-
+  const centerId = useParams();
+  console.log("centerId", centerId);
+  console.log("centerId", doctors);
+  // Apply initial filtering on load
   useEffect(() => {
-    fetchDoctors();
-  }, []);
+    setFilteredDoctors(doctors);
+    setLoading(false);
+  }, [doctors]);
 
   // Apply filters
   const handleFilter = () => {
@@ -47,14 +31,16 @@ export default function Doctors() {
     }
 
     if (district) {
-      filtered = filtered.filter((doctor) =>
-        (doctor.district || "").toLowerCase().includes(district.toLowerCase())
+      filtered = filtered.filter(
+        (doctor) =>
+          (doctor.district || "").toLowerCase() === district.toLowerCase()
       );
     }
 
     if (upazila) {
-      filtered = filtered.filter((doctor) =>
-        (doctor.upazila || "").toLowerCase().includes(upazila.toLowerCase())
+      filtered = filtered.filter(
+        (doctor) =>
+          (doctor.upazila || "").toLowerCase() === upazila.toLowerCase()
       );
     }
 
@@ -65,6 +51,14 @@ export default function Doctors() {
     const token = getAccessToken();
     if (!token) {
       navigate("/login");
+      return;
+    }
+
+    if (centerId) {
+      navigate(`/appointments/${doctorId}`, {
+        state: { centerId },
+        replace: true,
+      });
     } else {
       navigate(`/appointments/${doctorId}`, { replace: true });
     }
@@ -136,7 +130,7 @@ export default function Doctors() {
               </p>
               <p className="text-gray-700 mt-1">Fees: ${doctor.fees}</p>
               <button
-                onClick={() => handleBookDoctor(doctor._id)}
+                onClick={() => handleBookDoctor(doctor._id, centerId)}
                 className="bg-[#47ccc8] text-white px-4 py-2 mt-4 w-full rounded-lg hover:bg-blue-700"
               >
                 Book Appointment
@@ -147,4 +141,6 @@ export default function Doctors() {
       )}
     </div>
   );
-}
+};
+
+export default DoctorSpecificList;

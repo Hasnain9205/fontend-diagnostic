@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getAccessToken } from "../../../../Utils";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../../Hook/useAxios";
@@ -14,6 +14,7 @@ import {
   Legend,
 } from "chart.js";
 import { Line, Bar } from "react-chartjs-2";
+import { AuthContext } from "../../provider/AuthProvider";
 
 ChartJS.register(
   CategoryScale,
@@ -27,6 +28,7 @@ ChartJS.register(
 );
 
 const DoctorDashboard = () => {
+  const { user } = useContext(AuthContext);
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -37,7 +39,8 @@ const DoctorDashboard = () => {
         const token = getAccessToken();
         if (!token) throw new Error("Unauthorized: Token missing");
 
-        const docId = localStorage.getItem("userId");
+        const docId = user._id;
+        console.log("doId", docId);
         if (!docId) throw new Error("Doctor ID is missing in localStorage.");
 
         const response = await axiosInstance.get("/doctor/dashboard", {

@@ -1,68 +1,38 @@
+// src/Hook/useAxios.js
 import axios from "axios";
-import {
-  getAccessToken,
-  getRefreshToken,
-  removeAccessToken,
-} from "../../Utils";
+import { getAccessToken, removeAccessToken } from "../../Utils"; // Utility functions
 
 const useAxios = axios.create({
-  baseURL: "http://localhost:5001/api",
+  baseURL: "https://backend-diagnostic-4.onrender.com", // API base URL
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Request interceptor to attach access token
+// Request Interceptor: Attach the token to headers for every request
 useAxios.interceptors.request.use(
   (config) => {
-    const accessToken = getAccessToken();
-    console.log("accessToken....", accessToken);
-    if (accessToken) {
-      config.headers["Authorization"] = `Bearer ${accessToken}`;
+    const token = getAccessToken(); // Get the access token from localStorage
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`; // Attach token to the request
     }
     return config;
   },
-  (error) => Promise.reject(error)
-);
-
-// Response interceptor to handle token expiry and refresh the token
-useAxios.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
-      try {
-        // Get the refresh token from localStorage
-        const refreshToken = getRefreshToken();
-        console.log("refresh token....", refreshToken);
-        if (!refreshToken) {
-          return Promise.reject(error);
-        }
-
-        // Request a new access token using the refresh token
-        const response = await axios.post(
-          "http://localhost:5001/api/users/refreshToken",
-          { refreshToken }
-        );
-
-        const newAccessToken = response.data.accessToken;
-        localStorage.setItem("accessToken", newAccessToken); // Store the new access token
-
-        // Retry the original request with the new access token
-        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
-        return useAxios(originalRequest);
-      } catch (refreshError) {
-        console.error("Failed to refresh token:", refreshError);
-        removeAccessToken();
-        window.location.href = "/login";
-        return Promise.reject(refreshError);
-      }
-    }
-
+  (error) => {
     return Promise.reject(error);
   }
 );
+
+// Response Interceptor: Handle 401 errors (unauthorized) and redirect to login
+useAxios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      removeAccessToken(); // Clear token if unauthorized
+      window.location.href = "/login"; // Redirect to login
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default useAxios;

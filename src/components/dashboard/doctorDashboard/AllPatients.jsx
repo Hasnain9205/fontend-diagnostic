@@ -1,16 +1,18 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axiosInstance from "../../../Hook/useAxios";
 import { getAccessToken } from "../../../../Utils";
 import Swal from "sweetalert2";
+import { AuthContext } from "../../provider/AuthProvider";
 
 const AllPatients = () => {
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useContext(AuthContext);
 
   const fetchUniquePatients = async () => {
     try {
       const token = getAccessToken();
-      const docId = localStorage.getItem("userId");
+      const docId = user._id;
 
       const response = await axiosInstance.get("/doctor/unique-patients", {
         headers: {

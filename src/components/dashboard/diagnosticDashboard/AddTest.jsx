@@ -1,10 +1,14 @@
-import { useState } from "react";
-import axiosInstance from "../../../Hook/useAxios";
+import { useContext, useState } from "react";
 import Swal from "sweetalert2";
-import { getAccessToken } from "../../../../Utils";
 import { ClipLoader } from "react-spinners";
+import { getAccessToken } from "../../../../Utils";
+import useAxios from "../../../Hook/useAxios";
+import { AuthContext } from "../../provider/AuthProvider";
 
 export const AddTest = () => {
+  const { user } = useContext(AuthContext);
+  const centerId = user.centerId;
+  console.log("centerId", centerId);
   const [formData, setFormData] = useState({
     name: "",
     category: "",
@@ -45,9 +49,8 @@ export const AddTest = () => {
       if (data.secure_url) {
         setFormData((prevData) => ({
           ...prevData,
-          image: data.secure_url, // Set the image URL in the form data
+          image: data.secure_url,
         }));
-        console.log("Image URL:", data.secure_url); // <-- Log the image URL here
         Swal.fire("Success", "Image uploaded successfully", "success");
       } else {
         Swal.fire("Error", "Failed to upload image", "error");
@@ -63,9 +66,6 @@ export const AddTest = () => {
     e.preventDefault();
     setErrorMessage("");
 
-    // Log the formData before sending to check if all fields are filled
-    console.log(formData); // <-- Add this line
-
     if (formData.price <= 0) {
       Swal.fire("Error", "Price must be a positive number", "error");
       return;
@@ -80,9 +80,9 @@ export const AddTest = () => {
 
     try {
       const token = getAccessToken();
-      const response = await axiosInstance.post(
+      const response = await useAxios.post(
         "/tests/create-test",
-        formData, // Sending the form data to the backend
+        { ...formData, centerId }, // Include centerId in the payload
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -97,7 +97,7 @@ export const AddTest = () => {
           category: "",
           description: "",
           price: "",
-          image: "", // Clear the form after successful submission
+          image: "",
         });
       } else {
         Swal.fire("Error", response.data.message, "error");
@@ -129,7 +129,7 @@ export const AddTest = () => {
             type="text"
             id="name"
             name="name"
-            value={formData.testName}
+            value={formData.name}
             onChange={handleInputChange}
             className="mt-1 p-2 w-full border rounded-lg"
             required
@@ -172,22 +172,40 @@ export const AddTest = () => {
           />
         </div>
 
-        <div className="mb-4">
-          <label
-            htmlFor="price"
-            className="block text-gray-700 dark:text-gray-300"
-          >
-            Price
-          </label>
-          <input
-            type="number"
-            id="price"
-            name="price"
-            value={formData.price}
-            onChange={handleInputChange}
-            className="mt-1 p-2 w-full border rounded-lg"
-            required
-          />
+        <div className="flex gap-10">
+          <div className="mb-4 flex-1">
+            <label
+              htmlFor="price"
+              className="block text-gray-700 dark:text-gray-300"
+            >
+              Price
+            </label>
+            <input
+              type="number"
+              id="price"
+              name="price"
+              value={formData.price}
+              onChange={handleInputChange}
+              className="mt-1 p-2 w-full border rounded-lg"
+              required
+            />
+          </div>
+          <div className="mb-4 flex-1">
+            <label
+              htmlFor="centerId"
+              className="block text-gray-700 dark:text-gray-300"
+            >
+              Diagnostic ID
+            </label>
+            <input
+              type="text"
+              id="centerId"
+              name="centerId"
+              value={centerId}
+              className="mt-1 p-2 w-full border rounded-lg"
+              disabled
+            />
+          </div>
         </div>
 
         <div className="mb-4">
@@ -210,18 +228,17 @@ export const AddTest = () => {
 
         <button
           type="submit"
-          className="btn btn-square w-full p-4 hover:text-white bg-[#47ccc8] rounded-lg shadow-lg flex items-center justify-center hover:bg-blue-950"
-          disabled={loading}
+          className="bg-blue-500 text-white p-2 rounded-lg w-full"
         >
           {loading ? (
-            <>
-              <ClipLoader loading={loading} size={20} />
-              <span className="ml-2 text-black">Adding...</span>
-            </>
+            <ClipLoader size={20} color="white" loading={true} />
           ) : (
             "Add Test"
           )}
         </button>
+        {errorMessage && (
+          <div className="mt-2 text-red-500">{errorMessage}</div>
+        )}
       </form>
     </div>
   );

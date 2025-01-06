@@ -8,126 +8,130 @@ import {
   setAccessToken,
   setRefreshToken,
 } from "../../../Utils";
-import axiosInstance from "../../Hook/useAxios";
+import useAxios from "../../Hook/useAxios"; // Your Axios instance
 
 export const AuthContext = createContext();
 
-export const AuthProvider = (props) => {
+export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [loggedOut, setLoggedOut] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false); // Prevent multiple refreshes
   const navigate = useNavigate();
 
-  // Function to login user
+  // Login function
   const login = async (email, password) => {
     try {
       setLoading(true);
-      const result = await axiosInstance.post("/users/login", {
-        email,
-        password,
-      });
-      const { accessToken, refreshToken, user: userData } = result.data;
-      localStorage.setItem("userId", userData._id);
+      const response = await useAxios.post("/users/login", { email, password });
+      const { accessToken, refreshToken, user: userData } = response.data;
 
-      setUser(userData);
-      setAccessToken(accessToken);
-      setRefreshToken(refreshToken);
+      setUser(userData); // Set user data
+      setAccessToken(accessToken); // Store access token
+      setRefreshToken(refreshToken); // Store refresh token
       return userData.role;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Function to get user profile
-  const getProfile = async () => {
-    const token = getAccessToken();
-    console.log("Access Token on page reload:", token); // Debugging
-
-    if (!token) {
-      setUser(null);
-      setLoading(false);
-      console.log("No access token found. Navigating to login...");
-      navigate("/login"); // Directly navigate to login if no token
-      return;
-    }
-
-    try {
-      const { data } = await axiosInstance.get("/users/profile", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log("User profile fetched:", data.user); // Debugging
-      setUser(data.user);
     } catch (error) {
-      console.error("Error fetching profile:", error);
-
+      console.error("Error fetching profile:", error.message);
       if (error.response?.status === 401 || error.response?.status === 403) {
-        console.log("Token is expired, attempting to refresh.");
-
-        const refreshToken = getRefreshToken();
-        console.log(
-          "Using refresh token to refresh access token:",
-          refreshToken
-        );
-
-        if (refreshToken) {
-          try {
-            const response = await axiosInstance.post("/users/refresh", {
-              refreshToken,
-            });
-            const { accessToken: newAccessToken } = response.data;
-            setAccessToken(newAccessToken);
-            getProfile(); // Re-fetch the profile with the new token
-          } catch (refreshError) {
-            console.error("Refresh token expired or invalid:", refreshError);
-            logout(); // Log the user out if refreshing failed
-          }
-        } else {
-          logout();
-        }
+        await handleTokenRefresh(); // Refresh token if expired
       } else {
-        navigate("/login"); // Navigate to login for other errors
+        logout(); // Logout if any other error occurs
       }
     } finally {
       setLoading(false);
     }
   };
 
-  // Check profile and tokens on component mount (page reload)
-  useEffect(() => {
-    const accessToken = getAccessToken();
-    console.log("Access token on component mount:", accessToken); // Debugging
+  // Get user profile function
+  const getProfile = async () => {
+    setLoading(true);
+    try {
+      const token = getAccessToken();
+      if (!token) throw new Error("No token available");
 
-    if (accessToken) {
-      // If there is an access token, try to fetch profile
-      getProfile();
-    } else {
-      setLoading(false); // No token, stop loading
-      console.log("No access token found during initial load.");
+      const response = await useAxios.get("/users/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUser(response.data.user);
+    } catch (error) {
+      console.error("Error fetching profile:", error.message);
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        await handleTokenRefresh(); // Refresh token if expired
+      } else {
+        logout(); // Logout if any other error occurs
+      }
+    } finally {
+      setLoading(false);
     }
-  }, []);
+  };
+
+  // Handle token refresh
+  const handleTokenRefresh = async () => {
+    if (isRefreshing) return; // Prevent multiple refresh attempts at the same time
+    setIsRefreshing(true);
+
+    try {
+      const refreshToken = getRefreshToken();
+      if (!refreshToken) {
+        console.error("No refresh token available");
+        logout();
+        return;
+      }
+
+      console.log("Refreshing token with:", refreshToken);
+
+      const response = await useAxios.post("/users/refreshToken", {
+        refreshToken,
+      });
+
+      console.log("Token refresh response:", response.data);
+
+      if (response.data.accessToken) {
+        setAccessToken(response.data.accessToken); // Store new access token
+        await getProfile(); // Fetch the profile after the token refresh
+      } else {
+        console.error("Refresh token invalid or expired");
+        logout(); // Log out if the refresh token is invalid
+      }
+    } catch (error) {
+      console.error("Token refresh failed:", error.message);
+      logout(); // Log out if token refresh fails
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   // Logout function
   const logout = () => {
-    setLoading(true);
+    console.error("Token expired or invalid, logging out...");
     removeAccessToken();
     removeRefreshToken();
     setUser(null);
-    setLoggedOut(true);
-    localStorage.removeItem("userId");
     setLoading(false);
     navigate("/login");
   };
 
-  const value = {
-    user,
-    login,
-    logout,
-    loading,
-    setUser,
-    loggedOut,
+  const checkAuth = async () => {
+    try {
+      const token = getAccessToken();
+      if (token) {
+        await getProfile(); // Fetch profile if token exists
+      } else {
+        setLoading(false); // Stop loading if no token exists
+        navigate("/login"); // Navigate to login if no token
+      }
+    } catch (error) {
+      console.error("Authentication check failed:", error.message);
+      logout(); // Log out if there's an error
+    }
   };
 
-  return (
-    <AuthContext.Provider value={value}>{props.children}</AuthContext.Provider>
-  );
+  useEffect(() => {
+    checkAuth(); // Call checkAuth on mount
+  }, []); // Empty dependency array to only run on component mount
+
+  const value = { user, login, logout, loading };
+
+  if (loading) return <div>Loading...</div>; // You can replace this with a loading spinner or any UI component
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
