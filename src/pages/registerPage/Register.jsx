@@ -16,6 +16,7 @@ export default function Register() {
     const name = form.name.value;
     const email = form.email.value;
     const password = form.password.value;
+    const age = form.age.value;
     const address = form.address.value;
     const gender = form.gender.value;
     const district = form.district.value;
@@ -27,6 +28,7 @@ export default function Register() {
     formData.append("name", name);
     formData.append("email", email);
     formData.append("password", password);
+    formData.append("age", age);
     formData.append("address", address);
     formData.append("gender", gender);
     formData.append("district", district);
@@ -78,7 +80,7 @@ export default function Register() {
 
   return (
     <div className="hero mt-10">
-      <div className="hero-content flex border-2 shrink-0 shadow-2xl bg-white p-6 rounded-lg">
+      <div className="hero-content flex border-2 shrink-0 shadow-2xl bg-white p-4 rounded-lg">
         <div className="w-1/2">
           <img src={loginImg} alt="register" />
         </div>
@@ -87,45 +89,49 @@ export default function Register() {
             Create Your Account
           </h2>
           <form onSubmit={handleRegister}>
-            <div className="form-control mb-4">
-              <label className="label-text font-medium">Name</label>
-              <input
-                type="text"
-                name="name"
-                placeholder="Enter your name"
-                className="input input-bordered p-4 rounded-lg w-full shadow-md"
-                required
-              />
+            <div className="flex gap-4">
+              <div className="form-control mb-4 flex-1">
+                <label className="label-text font-medium">Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Enter your name"
+                  className="input input-bordered p-4 rounded-lg w-full shadow-md"
+                  required
+                />
+              </div>
+              <div className="form-control mb-4 flex-1">
+                <label className="label-text font-medium">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  className="input input-bordered p-4 rounded-lg w-full shadow-md"
+                  required
+                />
+              </div>
             </div>
-            <div className="form-control mb-4">
-              <label className="label-text font-medium">Email</label>
-              <input
-                type="email"
-                name="email"
-                placeholder="Enter your email"
-                className="input input-bordered p-4 rounded-lg w-full shadow-md"
-                required
-              />
-            </div>
-            <div className="form-control mb-4">
-              <label className="label-text font-medium">Password</label>
-              <input
-                type="password"
-                name="password"
-                placeholder="Enter your password"
-                className="input input-bordered p-4 rounded-lg w-full shadow-md"
-                required
-              />
-            </div>
-            <div className="form-control mb-4">
-              <label className="label-text font-medium">Address</label>
-              <input
-                type="text"
-                name="address"
-                placeholder="Enter your address"
-                className="input input-bordered p-4 rounded-lg w-full shadow-md"
-                required
-              />
+            <div className=" flex gap-4">
+              <div className="form-control mb-4 flex-1">
+                <label className="label-text font-medium">Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Enter your password"
+                  className="input input-bordered p-4 rounded-lg w-full shadow-md"
+                  required
+                />
+              </div>
+              <div className="form-control mb-4 flex-1">
+                <label className="label-text font-medium">Address</label>
+                <input
+                  type="text"
+                  name="address"
+                  placeholder="Enter your address"
+                  className="input input-bordered p-4 rounded-lg w-full shadow-md"
+                  required
+                />
+              </div>
             </div>
             <div className="flex gap-4">
               <div className="form-control mb-4 flex-1">
@@ -133,6 +139,7 @@ export default function Register() {
                 <input
                   type="text"
                   name="district"
+                  placeholder="Enter your district"
                   className="input input-bordered p-4 rounded-lg w-full shadow-md"
                   required
                 />
@@ -142,6 +149,7 @@ export default function Register() {
                 <input
                   type="text"
                   name="upazila"
+                  placeholder="Enter your upazila"
                   className="input input-bordered p-4 rounded-lg w-full shadow-md"
                   required
                 />
@@ -173,24 +181,36 @@ export default function Register() {
                 </select>
               </div>
             </div>
-            <div className="form-control mb-4">
-              <label className="label-text font-medium">Profile Image</label>
-              <input
-                type="file"
-                name="profileImage"
-                className="file-input file-input-bordered w-full mb-2"
-                accept="image/*"
-                onChange={handleImageChange}
-              />
-              {profileImagePreview && (
-                <div className="w-32 h-32 bg-gray-200 p-2 rounded-full overflow-hidden">
-                  <img
-                    src={profileImagePreview}
-                    alt="Profile Preview"
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-              )}
+            <div className="flex gap-4">
+              <div className="form-control mb-4 flex-1">
+                <label className="label-text font-medium">Profile Image</label>
+                <input
+                  type="file"
+                  name="profileImage"
+                  className="file-input file-input-bordered w-full mb-2"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+                {profileImagePreview && (
+                  <div className="w-32 h-32 bg-gray-200 p-2 rounded-full overflow-hidden">
+                    <img
+                      src={profileImagePreview}
+                      alt="Profile Preview"
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                )}
+              </div>
+              <div className="form-control mb-4 flex-1">
+                <label className="label-text font-medium">age</label>
+                <input
+                  type="number"
+                  name="age"
+                  placeholder="Enter your age"
+                  className="input input-bordered p-4 rounded-lg w-full shadow-md"
+                  required
+                />
+              </div>
             </div>
             <div className="form-control mt-6">
               <button

@@ -128,22 +128,22 @@ export default function AdminDashboard() {
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard
-          icon={<FaUserDoctor />}
+          icon={<FaUserDoctor className="w-8sss" />}
           label="Doctors"
           count={dashboardData.doctors || 0}
         />
         <StatCard
-          icon={<FaBook />}
-          label="Patients"
+          icon={<FaBook className="w-8" />}
+          label="Patients className:"
           count={dashboardData.patients || 0}
         />
         <StatCard
-          icon={<GrUserManager />}
+          icon={<GrUserManager className="w-8" />}
           label="Appointments"
           count={dashboardData.appointments || 0}
         />
         <StatCard
-          icon={<GrUserManager />}
+          icon={<GrUserManager className="w-8" />}
           label="Test Appointments"
           count={dashboardData.testAppointments || 0}
         />

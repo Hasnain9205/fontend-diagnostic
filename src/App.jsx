@@ -58,11 +58,15 @@ import GetTests from "./components/dashboard/diagnosticDashboard/GetTests";
 import AddDoctor from "./components/dashboard/diagnosticDashboard/AddDoctor";
 import GetDoctor from "./components/dashboard/diagnosticDashboard/GetDoctor";
 import TestAppointmentForDiagnostic from "./components/dashboard/diagnosticDashboard/TestAppointmentForDiagnostic";
+import MyPrescriptions from "./components/Prescriptions/MyPrescriptions";
+import PrescriptionDetail from "./components/Prescriptions/PrescriptionDetail";
 
 const App = () => {
   return (
     <div>
-      <Navbar className="mx-20" />
+      <div className="mx-44">
+        <Navbar />
+      </div>
       <div className="mx-20 sm:mx-[10%]">
         <Routes>
           {/* Public Routes */}
@@ -92,7 +96,6 @@ const App = () => {
           <Route path="/success" element={<Success />} />
           <Route path="/cancel" element={<Cancel />} />
           <Route path="/invoice" element={<InvoiceList />} />
-
           <Route path="/diagnostic" element={<Diagnostics />} />
           <Route path="/diagnostic/:id" element={<DiagnosticDetails />} />
           <Route
@@ -100,6 +103,11 @@ const App = () => {
             element={<DoctorSpecificList />}
           />
           <Route path="/diagnostic/:centerId/tests" element={<TestList />} />
+          <Route path="/getPrescription" element={<MyPrescriptions />} />
+          <Route
+            path="/prescriptionDetails/:id"
+            element={<PrescriptionDetail />}
+          />
 
           {/* Admin Dashboard */}
           <Route

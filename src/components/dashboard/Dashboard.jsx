@@ -17,6 +17,8 @@ import { LuTestTubes } from "react-icons/lu";
 import { FaNoteSticky } from "react-icons/fa6";
 import { BsFileEarmarkTextFill } from "react-icons/bs";
 import { ImUsers } from "react-icons/im";
+import { LuGitPullRequestCreate } from "react-icons/lu";
+import { IoMdDoneAll } from "react-icons/io";
 
 import {
   FaHome,
@@ -64,9 +66,14 @@ const rolePages = {
       icon: <FaUserShield />,
       label: "Manage Roles",
     },
-    addDiagnostic: { component: <AddDiagnostic />, label: "Add Diagnostic" },
+    addDiagnostic: {
+      component: <AddDiagnostic />,
+      icon: <LuGitPullRequestCreate />,
+      label: "Add Diagnostic",
+    },
     allDiagnosticsAdmin: {
       component: <AllDiagnosticsAdmin />,
+      icon: <IoMdDoneAll />,
       label: "All Diagnostics",
     },
   },
@@ -81,6 +88,7 @@ const rolePages = {
       icon: <FaCalendarCheck />,
       label: "Appointments",
     },
+
     doctorList: {
       component: <DoctorList />,
       icon: <FaUserMd />,
@@ -200,9 +208,9 @@ export default function Dashboard() {
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
-                className={`flex items-center px-4 py-2 mt-2 text-gray-700 transition-transform duration-200 rounded-md hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700 ${
+                className={`flex items-center px-6 py-2 mt-2 text-gray-700 transition-transform duration-200  hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700 w-full ${
                   currentPage === page
-                    ? "bg-blue-500 text-white"
+                    ? "bg-teal-500 text-white w-full"
                     : "bg-transparent"
                 }`}
                 aria-label={`Navigate to ${label}`}

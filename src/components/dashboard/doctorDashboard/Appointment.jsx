@@ -1,109 +1,123 @@
 import { useContext, useEffect, useState } from "react";
-import { MdCancel, MdCheckCircle } from "react-icons/md"; // Import icons
+import { MdCancel, MdCheckCircle, MdLocalHospital } from "react-icons/md";
 import axiosInstance from "../../../Hook/useAxios";
 import { getAccessToken } from "../../../../Utils";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../provider/AuthProvider";
+import PrescriptionModel from "../../../components/dashboard/doctorDashboard/PrescriptionModal";
 
 const Appointment = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
   const { user } = useContext(AuthContext);
 
-  const fetchAppointmentData = async () => {
-    try {
-      const token = getAccessToken();
-      const docId = user._id;
-
-      const response = await axiosInstance.get("/doctor/appointment-doctor", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: { docId },
-      });
-      console.log(response.data.appointment);
-      setAppointments(response.data.appointment || []);
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Error fetching appointments",
-        text: error.response?.data?.message || "Unable to load appointments.",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchAppointmentData();
-  }, []);
+    const fetchAppointments = async () => {
+      try {
+        const token = getAccessToken();
+        const response = await axiosInstance.get("/doctor/appointment-doctor", {
+          headers: { Authorization: `Bearer ${token}` },
+          params: { docId: user._id },
+        });
+        console.log(response.data); // Add this to check the response
+        setAppointments(response.data.appointment || []);
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error fetching appointments",
+          text: error.response?.data?.message || "Unable to load appointments.",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const cancelAppointment = async (appointmentId) => {
+    fetchAppointments();
+  }, [user._id]);
+
+  const handleCancelAppointment = async (appointmentId) => {
     try {
       const token = getAccessToken();
-      const docId = localStorage.getItem("userId");
-
-      console.log("Doctor ID from localStorage: ", docId);
-
       const response = await axiosInstance.patch(
         "/doctor/cancel-appointment",
-        { appointmentId, docId },
+        { appointmentId, docId: user._id },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
-      Swal.fire({
-        icon: "success",
-        title: "Appointment Cancelled",
-        text: response.data.msg,
-      });
-      setAppointments((prevAppointments) =>
-        prevAppointments.filter((app) => app._id !== appointmentId)
+      Swal.fire("Success", response.data.msg, "success");
+      setAppointments((prev) =>
+        prev.filter((app) => app._id !== appointmentId)
       );
     } catch (error) {
-      console.log("Error during appointment confirmation:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error Canceling Appointment",
-        text: error.response?.data?.msg || "Something went wrong!",
-      });
+      Swal.fire(
+        "Error",
+        error.response?.data?.msg || "Unable to cancel appointment.",
+        "error"
+      );
     }
   };
 
-  //confirmed appointment
-  const confirmedAppointment = async (appointmentId) => {
+  const handleConfirmAppointment = async (appointmentId) => {
     try {
       const token = getAccessToken();
-      const docId = localStorage.getItem("userId");
-
-      console.log("Doctor ID from localStorage: ", docId);
-
       const response = await axiosInstance.patch(
         "/doctor/complete-appointment",
-        { appointmentId, docId },
+        { appointmentId, docId: user._id },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
-      Swal.fire({
-        icon: "success",
-        title: "Appointment Confirmed",
-        text: response.data.msg,
-      });
-      setAppointments((prevAppointments) =>
-        prevAppointments.filter((app) => app._id !== appointmentId)
+      Swal.fire("Success", response.data.msg, "success");
+      setAppointments((prev) =>
+        prev.filter((app) => app._id !== appointmentId)
       );
     } catch (error) {
-      console.log("Error during appointment confirmation:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error Confirming Appointment",
-        text: error.response?.data?.msg || "Something went wrong!",
-      });
+      Swal.fire(
+        "Error",
+        error.response?.data?.msg || "Unable to confirm appointment.",
+        "error"
+      );
     }
+  };
+
+  const handleCreatePrescription = async (appointmentId, formData) => {
+    try {
+      const token = getAccessToken();
+      const response = await axiosInstance.post(
+        "/prescriptions/create",
+        {
+          ...formData,
+          appointmentId,
+          docId: user._id,
+          centerId: selectedAppointment?.centerId,
+          patientId: selectedAppointment?.patientId,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      Swal.fire("Success", response.data.msg, "success");
+      closeModal();
+    } catch (error) {
+      Swal.fire(
+        "Error",
+        error.response?.data?.msg || "Unable to create prescription.",
+        "error"
+      );
+    }
+  };
+
+  const handleOpenModal = (appointmentId, patientId, centerId) => {
+    console.log("Opening modal for:", appointmentId, patientId, centerId); // Debugging log
+    setSelectedAppointment({ appointmentId, patientId, centerId });
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedAppointment(null);
   };
 
   return (
     <div>
-      <h2 className="text-3xl font-semibold  text-center">
+      <h2 className="text-3xl font-semibold text-center">
         Doctors Appointment
       </h2>
       <h1 className="text-blue-700 font-bold text-xl">
@@ -118,41 +132,41 @@ const Appointment = () => {
           <table className="w-full border-collapse bg-white shadow-lg rounded-lg overflow-hidden">
             <thead className="bg-[#47ccc8]">
               <tr>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600  border border-gray-300">
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600 border">
                   Image
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600  border border-gray-300">
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600 border">
                   Patient
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600  border border-gray-300">
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600 border">
                   Doctor
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600  border border-gray-300">
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600 border">
                   Slot Date
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600  border border-gray-300">
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600 border">
                   Slot Time
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600  border border-gray-300">
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600 border">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600  border border-gray-300">
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600 border">
                   Action
                 </th>
               </tr>
             </thead>
             <tbody>
-              {appointments.map((appointment, index) => (
+              {appointments.map((app, idx) => (
                 <tr
-                  key={appointment._id}
+                  key={app._id}
                   className={`${
-                    index % 2 === 0 ? "bg-gray-100" : "bg-white"
+                    idx % 2 === 0 ? "bg-gray-100" : "bg-white"
                   } hover:bg-blue-100`}
                 >
-                  <td className="px-4 py-2 border border-gray-300">
-                    {appointment.userId?.profileImage ? (
+                  <td className="px-4 py-2 border">
+                    {app.userId?.profileImage ? (
                       <img
-                        src={appointment.userId.profileImage}
+                        src={app.userId.profileImage}
                         alt="Patient"
                         className="w-12 h-12 rounded-full"
                       />
@@ -160,46 +174,61 @@ const Appointment = () => {
                       "N/A"
                     )}
                   </td>
-                  <td className="px-4 py-2 border border-gray-300">
-                    {appointment.userId?.name || "N/A"}
+                  <td className="px-4 py-2 border">
+                    {app.userId?.name || "N/A"}
                   </td>
-                  <td className="px-4 py-2 border border-gray-300">
-                    {appointment.docData?.name || "N/A"}
+                  <td className="px-4 py-2 border">
+                    {app.docData?.name || "N/A"}
                   </td>
-                  <td className="px-4 py-2 border border-gray-300">
-                    {new Date(appointment.slotDate).toLocaleDateString()}
+                  <td className="px-4 py-2 border">
+                    {new Date(app.slotDate).toLocaleDateString()}
                   </td>
-                  <td className="px-4 py-2 border border-gray-300">
-                    {appointment.slotTime || "N/A"}
-                  </td>
-                  <td className="px-4 py-2 border border-gray-300">
+                  <td className="px-4 py-2 border">{app.slotTime || "N/A"}</td>
+                  <td className="px-4 py-2 border">
                     <span
                       className={`px-2 py-1 rounded-full text-base font-semibold ${
-                        appointment.status === "completed"
+                        app.status === "completed"
                           ? "bg-green-100 text-green-500"
-                          : appointment.status === "pending"
-                          ? "bg-yellow-100 text-yellow-500"
+                          : app.status === "booked"
+                          ? "bg-yellow-800 text-yellow-300"
                           : "bg-red-100 text-red-500"
                       }`}
                     >
-                      {appointment.status || "Unknown"}
+                      {app.status || "Unknown"}
                     </span>
                   </td>
-                  <td className="px-4 py-2 border border-gray-300">
-                    {appointment.status === "pending" && (
+                  <td className="px-4 py-2 border">
+                    {app.status === "completed" && (
                       <button
-                        onClick={() => cancelAppointment(appointment._id)}
-                        className="flex items-center px-4 py-2 text-white bg-red-500 rounded-md hover:bg-red-700"
+                        onClick={() =>
+                          handleOpenModal(
+                            app._id,
+                            app.userId._id,
+                            app.centerId?._id
+                          )
+                        }
+                        className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
                       >
-                        <MdCancel className="mr-2" /> Cancel
+                        <MdLocalHospital className="mr-2" />
+                        Prescription
                       </button>
                     )}
-                    {appointment.status === "booked" && (
+                    {app.status === "booked" && (
                       <button
-                        onClick={() => confirmedAppointment(appointment._id)}
-                        className="flex items-center px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-700"
+                        onClick={() => handleConfirmAppointment(app._id)}
+                        className="flex items-center px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-700"
                       >
-                        <MdCheckCircle className="mr-2" /> Confirm
+                        <MdCheckCircle className="mr-2" />
+                        Confirm
+                      </button>
+                    )}
+                    {app.status === "pending" && (
+                      <button
+                        onClick={() => handleCancelAppointment(app._id)}
+                        className="flex items-center px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700"
+                      >
+                        <MdCancel className="mr-2" />
+                        Cancel
                       </button>
                     )}
                   </td>
@@ -209,6 +238,14 @@ const Appointment = () => {
           </table>
         </div>
       )}
+      <PrescriptionModel
+        showModal={showModal}
+        closeModal={closeModal}
+        handleCreatePrescription={handleCreatePrescription}
+        appointmentId={selectedAppointment?.appointmentId}
+        patientId={selectedAppointment?.patientId}
+        centerId={selectedAppointment?.centerId}
+      />
     </div>
   );
 };

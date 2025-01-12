@@ -41,3 +41,34 @@
   height: 120px;
   animation: spin 2s linear infinite;
 }
+
+@media print {
+  body {
+    margin: 10mm;
+    font-size: 12pt;
+  }
+
+  /* Hide elements that shouldn't appear in print */
+  button {
+    display: none;
+  }
+
+  /* Set page size to A4 */
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+
+  /* Ensure content fits properly */
+  .max-w-4xl {
+    max-width: 100% !important;
+  }
+}
+
+.page-break {
+  page-break-before: always;
+}
+
+.no-break {
+  page-break-inside: avoid;
+}
