@@ -56,7 +56,7 @@
   /* Set page size to A4 */
   @page {
     size: A4;
-    margin: 10mm;
+    margin: 5mm;
   }
 
   /* Ensure content fits properly */
@@ -71,4 +71,10 @@
 
 .no-break {
   page-break-inside: avoid;
+}
+
+@media print {
+  .hidden-on-print {
+    display: none;
+  }
 }
