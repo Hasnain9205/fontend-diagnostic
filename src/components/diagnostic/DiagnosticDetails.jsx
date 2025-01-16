@@ -66,29 +66,33 @@ const DiagnosticDetails = () => {
   return (
     <div className="mt-20">
       <div className="flex items-center justify-center">
-        <h1 className="text-4xl font-bold">{diagnostic.name}</h1>
+        <h1 className="text-3xl font-bold">{diagnostic.name}</h1>
       </div>
-      <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-6">
+      <div className="max-w-3xl mx-auto  shadow-lg rounded-lg overflow-hidden mt-6">
         <img
-          className="w-full h-96 object-cover"
           src={diagnostic.profileImage || "/default-profile.png"}
           alt={diagnostic.name}
+          className="w-full h-72   mb-4"
         />
 
         <div className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <p className="text-lg">
-              <strong>Email:</strong> {diagnostic.email}
-            </p>
-            <p className="text-lg">
-              <strong>Phone:</strong> {diagnostic.phone}
-            </p>
-            <p className="text-lg">
-              <strong>District:</strong> {diagnostic.district}
-            </p>
-            <p className="text-lg">
-              <strong>Upazila:</strong> {diagnostic.upazila}
-            </p>
+          <div className="flex justify-between px-16 ">
+            <div>
+              <p className="text-lg">
+                <strong>Email:</strong> {diagnostic.email}
+              </p>
+              <p className="text-lg">
+                <strong>Phone:</strong> {diagnostic.phone}
+              </p>
+            </div>
+            <div>
+              <p className="text-lg">
+                <strong>District:</strong> {diagnostic.district}
+              </p>
+              <p className="text-lg">
+                <strong>Upazila:</strong> {diagnostic.upazila}
+              </p>
+            </div>
           </div>
 
           <div className="flex justify-center gap-4 mt-6">
@@ -111,15 +115,6 @@ const DiagnosticDetails = () => {
               className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
             >
               View Tests
-            </button>
-          </div>
-
-          <div className="flex justify-center mt-6">
-            <button
-              onClick={() => navigate(-1)}
-              className="bg-gray-700 hover:bg-gray-800 text-white px-6 py-2 rounded"
-            >
-              Back
             </button>
           </div>
         </div>

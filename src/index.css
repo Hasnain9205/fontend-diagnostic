@@ -41,39 +41,82 @@
   height: 120px;
   animation: spin 2s linear infinite;
 }
-
+/* TailwindCSS custom media query for A4 printing */
 @media print {
-  body {
-    margin: 10mm;
-    font-size: 12pt;
+  @page {
+    size: A5;
+    margin: 5mm; /* Further reduced margin */
   }
 
-  /* Hide elements that shouldn't appear in print */
-  button {
+  /* Adjust content layout for printing */
+  .print-content {
+    display: block;
+    page-break-before: always;
+    font-size: 8px; /* Further reduced font size for a compact layout */
+  }
+
+  .print-content .symptoms-section {
+    width: 15%; /* 1/4 width for Symptoms */
+    float: left;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    border-right: 1px solid #ccc; /* Border to separate symptoms */
+    margin-bottom: 10px;
+  }
+
+  .print-content .rx-section {
+    width: 70%; /* 3/4 width for Rx */
+    float: left;
+    padding-left: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+  }
+
+  /* Reset other content to take full width for printing */
+  .print-content .full-width {
+    width: 100%;
+    clear: both;
+    padding-top: 3px;
+    padding-bottom: 3px;
+  }
+
+  .print-content .text-center {
+    text-align: center;
+    margin-top: 3px;
+  }
+
+  /* Hide elements that are not needed for printing */
+  .hidden-on-print {
     display: none;
   }
 
-  /* Set page size to A4 */
-  @page {
-    size: A4;
-    margin: 5mm;
+  /* Reduce line height and margins for paragraphs */
+  .print-content p,
+  .print-content li {
+    margin-bottom: 3px;
+    line-height: 1.1;
   }
 
-  /* Ensure content fits properly */
-  .max-w-4xl {
-    max-width: 100% !important;
+  /* Reduce space between lists */
+  .print-content ul {
+    margin-top: 3px;
+    margin-bottom: 3px;
   }
-}
 
-.page-break {
-  page-break-before: always;
-}
+  /* Adjust styles for header sections */
+  .print-content h3 {
+    margin-top: 3px;
+    margin-bottom: 3px;
+    font-size: 10px; /* Reduced font size for headers */
+  }
 
-.no-break {
-  page-break-inside: avoid;
-}
+  /* Optional: adjust page height for long sections */
+  .print-content .long-section {
+    margin-bottom: 5px;
+    line-height: 1;
+  }
 
-@media print {
+  /* Print Button Visibility */
   .hidden-on-print {
     display: none;
   }

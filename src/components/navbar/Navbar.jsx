@@ -12,7 +12,6 @@ export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
-  const patientId = user?._id;
 
   const toggleDropdown = () => setDropdownOpen((prev) => !prev);
 
@@ -324,14 +323,14 @@ export default function Navbar() {
                       </Link>
 
                       <Link
-                        to={`/invoice`} // Using the appointmentId in the URL
+                        to={`/invoice`}
                         className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
                       >
                         All Invoices
                       </Link>
 
                       <Link
-                        to={`/getPrescription`} // Pass the patientId in the URL
+                        to={`/getPrescription`}
                         className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
                       >
                         My Prescription

@@ -89,7 +89,7 @@ const TestList = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto my-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="max-w-6xl mx-auto my-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {tests.map((test) => (
         <div
           key={test._id}

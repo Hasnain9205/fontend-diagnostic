@@ -45,13 +45,13 @@ const PrescriptionDetail = () => {
   if (error) return <div className="text-center text-red-500">{error}</div>;
 
   return (
-    <div className="max-w-4xl mx-auto border border-gray-300 shadow-lg bg-gradient-to-r from-yellow-200 to-white-400">
+    <div className="max-w-4xl mx-auto border border-gray-300 shadow-lg bg-gradient-to-r">
       <div className="print-content">
         {prescription ? (
           <>
             {/* Doctor and Center Details */}
             <div className="flex flex-wrap justify-between bg-blue-100 border-b-2 pt-4">
-              <div className="w-full sm:w-1/2 lg:w-1/3 px-14 pl-20">
+              <div className="w-full sm:w-1/2 lg:w-1/3  px-8">
                 <h2 className="text-xl font-semibold text-blue-700">
                   {prescription?.docId?.name}
                 </h2>
@@ -86,16 +86,17 @@ const PrescriptionDetail = () => {
                 </p>
               </div>
             </div>
-            <div className="flex justify-between px-24 bg-blue-200 border-b-2">
+            <div className="flex justify-between px-12 bg-blue-200 border-b-2">
               <div>Name: {prescription?.patientId?.name}</div>
               <div>Age: {prescription?.patientId?.age}</div>
             </div>
 
             {/* Symptoms, Examinations, and Medications */}
-            <div className="flex h-[650px]">
-              <div className="bg-red-100 px-8 pt-10 py-4 pl-16 sm:w-1/2 lg:w-1/4">
+            <div className="flex w-full h-full">
+              {/* Symptoms Section */}
+              <div className="symptoms-section border-r-2 p-4">
                 <h3 className="text-lg font-bold text-gray-700">Symptoms</h3>
-                <ul className="list-disc h-56 pl-5 text-sm text-gray-600">
+                <ul className="list-disc h-52 pl-5 text-sm text-gray-600">
                   {(Array.isArray(prescription?.symptoms)
                     ? prescription?.symptoms
                     : prescription?.symptoms?.split(",")
@@ -107,7 +108,7 @@ const PrescriptionDetail = () => {
                 <h3 className="text-lg font-bold text-gray-700 mt-4">
                   Examinations
                 </h3>
-                <ul className="list-disc pl-5 text-sm text-gray-600">
+                <ul className="list-disc pl-5 h-44   text-sm text-gray-600">
                   {(Array.isArray(prescription?.examinations)
                     ? prescription?.examinations
                     : prescription?.examinations?.split(",")
@@ -116,7 +117,8 @@ const PrescriptionDetail = () => {
                   )) || <p>No examinations available.</p>}
                 </ul>
               </div>
-              <div className="w-full  px-8 pt-10 py-4 pl-16 bg-yellow-100 sm:w-1/2 lg:w-1/3 ">
+              {/* Rx Section */}
+              <div className="rx-section p-8 ">
                 <h3 className="text-lg font-bold text-gray-700">Rx</h3>
                 {prescription?.medicines?.length > 0 ? (
                   <ul className="list-disc pl-5 text-sm text-gray-600">
@@ -140,7 +142,7 @@ const PrescriptionDetail = () => {
             </div>
 
             {/* Follow-up Message */}
-            <div className="text-center bg-gray-200 p-6">
+            <div className="full-width text-center bg-gray-200 p-6">
               <p className="text-xl font-semibold text-gray-700">
                 {prescription?.notes}
               </p>
