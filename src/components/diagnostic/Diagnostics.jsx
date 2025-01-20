@@ -120,7 +120,7 @@ export default function Diagnostics() {
                 <img
                   src={diag.profileImage || "default-image.jpg"}
                   alt={diag.name}
-                  className="w-full h-40 object-contain rounded-md mb-4"
+                  className="w-full h-40  rounded-md mb-4"
                 />
 
                 <h2 className="text-lg font-bold text-blue-600">{diag.name}</h2>

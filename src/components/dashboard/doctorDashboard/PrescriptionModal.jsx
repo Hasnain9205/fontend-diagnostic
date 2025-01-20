@@ -1,5 +1,16 @@
+import algoliasearch from "algoliasearch";
 import { useState } from "react";
-import { MdCancel } from "react-icons/md"; // Close icon
+import {
+  InstantSearch,
+  SearchBox,
+  Hits,
+  Configure,
+} from "react-instantsearch-hooks-web";
+
+const searchClient = algoliasearch(
+  "QK9KVRTNH4",
+  "655183af5b1e02d3ea9630b9196371df"
+);
 
 const PrescriptionModal = ({
   showModal,
@@ -10,11 +21,12 @@ const PrescriptionModal = ({
   const [formData, setFormData] = useState({
     symptoms: [""],
     examinations: [""],
-    medicines: [{ name: "", dosage: "", duration: "" }],
+    medicines: [
+      { name: "", dosage: "", duration: "", searchVisible: false }, // Initialize with correct object structure
+    ],
     notes: "",
   });
 
-  // Handle input change for array fields
   const handleArrayChange = (e, index, key) => {
     const { value } = e.target;
     setFormData((prevData) => {
@@ -24,15 +36,17 @@ const PrescriptionModal = ({
     });
   };
 
-  // Add a new field for symptoms or examinations
-  const addArrayField = (key) => {
+  const addArrayField = (key) =>
     setFormData((prevData) => ({
       ...prevData,
-      [key]: [...prevData[key], ""],
+      [key]: [
+        ...prevData[key],
+        key === "medicines"
+          ? { name: "", dosage: "", duration: "", searchVisible: false } // Ensure correct structure for medicines
+          : "", // Default empty string for other fields
+      ],
     }));
-  };
 
-  // Remove a field from symptoms or examinations
   const removeArrayField = (key, index) => {
     setFormData((prevData) => {
       const updatedArray = [...prevData[key]];
@@ -41,7 +55,6 @@ const PrescriptionModal = ({
     });
   };
 
-  // Handle changes for medicines
   const handleMedicineChange = (e, index, field) => {
     const { value } = e.target;
     setFormData((prevData) => {
@@ -51,36 +64,19 @@ const PrescriptionModal = ({
     });
   };
 
-  // Add a new medicine field
-  const addMedicineField = () => {
-    setFormData((prevData) => ({
-      ...prevData,
-      medicines: [
-        ...prevData.medicines,
-        { name: "", dosage: "", duration: "" },
-      ],
-    }));
-  };
-
-  // Remove a medicine field
-  const removeMedicineField = (index) => {
+  const handleMedicineSelect = (index, medicine) => {
     setFormData((prevData) => {
       const updatedMedicines = [...prevData.medicines];
-      updatedMedicines.splice(index, 1);
+      updatedMedicines[index].name = medicine.name;
+      updatedMedicines[index].searchVisible = false;
       return { ...prevData, medicines: updatedMedicines };
     });
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     handleCreatePrescription(appointmentId, formData);
   };
-  console.log("fda...", formData);
 
   return (
     <div
@@ -89,147 +85,155 @@ const PrescriptionModal = ({
       } fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50`}
     >
       <div className="bg-white p-6 rounded-lg shadow-lg w-1/2 max-h-screen overflow-y-auto">
-        <h2 className="text-2xl font-semibold text-center mb-4">
+        <h2 className="text-2xl font-semibold text-center mb-4 text-blue-600">
           Create Prescription
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
-            {/* Symptoms */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Symptoms
-              </label>
-              {formData.symptoms.map((symptom, index) => (
-                <div key={index} className="flex items-center space-x-2 mb-2">
-                  <input
-                    type="text"
-                    value={symptom}
-                    onChange={(e) => handleArrayChange(e, index, "symptoms")}
-                    className="w-full p-2 border rounded-md"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeArrayField("symptoms", index)}
-                    className="text-red-500"
-                  >
-                    <MdCancel />
-                  </button>
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={() => addArrayField("symptoms")}
-                className="text-blue-500 text-sm"
-              >
-                + Add Symptom
-              </button>
-            </div>
+            <h3 className="text-lg font-semibold">Symptoms</h3>
+            {formData.symptoms.map((symptom, index) => (
+              <div key={index} className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="Symptom"
+                  value={symptom}
+                  onChange={(e) => handleArrayChange(e, index, "symptoms")}
+                  className="w-full p-2 border rounded-md"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeArrayField("symptoms", index)}
+                  className="text-red-500"
+                >
+                  X
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => addArrayField("symptoms")}
+              className="text-blue-500"
+            >
+              + Add Symptom
+            </button>
 
-            {/* Examinations */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Examinations
-              </label>
-              {formData.examinations.map((exam, index) => (
-                <div key={index} className="flex items-center space-x-2 mb-2">
-                  <input
-                    type="text"
-                    value={exam}
-                    onChange={(e) =>
-                      handleArrayChange(e, index, "examinations")
-                    }
-                    className="w-full p-2 border rounded-md"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeArrayField("examinations", index)}
-                    className="text-red-500"
-                  >
-                    <MdCancel />
-                  </button>
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={() => addArrayField("examinations")}
-                className="text-blue-500 text-sm"
-              >
-                + Add Examination
-              </button>
-            </div>
+            <h3 className="text-lg font-semibold">Examinations</h3>
+            {formData.examinations.map((exam, index) => (
+              <div key={index} className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="Examination"
+                  value={exam}
+                  onChange={(e) => handleArrayChange(e, index, "examinations")}
+                  className="w-full p-2 border rounded-md"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeArrayField("examinations", index)}
+                  className="text-red-500"
+                >
+                  X
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => addArrayField("examinations")}
+              className="text-blue-500"
+            >
+              + Add Examination
+            </button>
 
-            {/* Medicines */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Medicines
-              </label>
-              {formData.medicines.map((medicine, index) => (
-                <div key={index} className="space-y-2 mb-4">
-                  <input
-                    type="text"
-                    placeholder="Name"
-                    value={medicine.name}
-                    onChange={(e) => handleMedicineChange(e, index, "name")}
-                    className="w-full p-2 border rounded-md"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Dosage"
-                    value={medicine.dosage}
-                    onChange={(e) => handleMedicineChange(e, index, "dosage")}
-                    className="w-full p-2 border rounded-md"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Duration"
-                    value={medicine.duration}
-                    onChange={(e) => handleMedicineChange(e, index, "duration")}
-                    className="w-full p-2 border rounded-md"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeMedicineField(index)}
-                    className="text-red-500 text-sm"
+            <h3 className="text-lg font-semibold">Medicines</h3>
+            {formData.medicines.map((medicine, index) => (
+              <div key={index} className="space-y-2">
+                <input
+                  type="text"
+                  placeholder="Medicine Name"
+                  value={medicine.name}
+                  onChange={(e) => handleMedicineChange(e, index, "name")}
+                  className="w-full p-2 border rounded-md"
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFormData((prevData) => {
+                      const updatedMedicines = [...prevData.medicines];
+                      updatedMedicines[index].searchVisible =
+                        !updatedMedicines[index].searchVisible;
+                      return { ...prevData, medicines: updatedMedicines };
+                    })
+                  }
+                  className="text-blue-500"
+                >
+                  {medicine.searchVisible ? "Hide Search" : "Search Medicine"}
+                </button>
+                {medicine.searchVisible && (
+                  <InstantSearch
+                    searchClient={searchClient}
+                    indexName="medicines"
                   >
-                    Remove Medicine
-                  </button>
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={addMedicineField}
-                className="text-blue-500 text-sm"
-              >
-                + Add Medicine
-              </button>
-            </div>
+                    <SearchBox
+                      translations={{ placeholder: "Search for a medicine..." }}
+                      className="w-full p-2 border rounded-md"
+                    />
+                    <Configure hitsPerPage={5} />
+                    <Hits
+                      hitComponent={({ hit }) => (
+                        <div
+                          className="cursor-pointer p-2 border bg-gray-100"
+                          onClick={() => handleMedicineSelect(index, hit)}
+                        >
+                          {hit.name}
+                        </div>
+                      )}
+                    />
+                  </InstantSearch>
+                )}
+                <input
+                  type="text"
+                  placeholder="Dosage"
+                  value={medicine.dosage}
+                  onChange={(e) => handleMedicineChange(e, index, "dosage")}
+                  className="w-full p-2 border rounded-md"
+                />
+                <input
+                  type="text"
+                  placeholder="Duration"
+                  value={medicine.duration}
+                  onChange={(e) => handleMedicineChange(e, index, "duration")}
+                  className="w-full p-2 border rounded-md"
+                />
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => addArrayField("medicines")}
+              className="text-blue-500"
+            >
+              + Add Medicine
+            </button>
 
-            {/* Notes */}
-            <div>
-              <label
-                className="block text-sm font-medium text-gray-700"
-                htmlFor="notes"
-              >
-                Notes
-              </label>
-              <textarea
-                id="notes"
-                name="notes"
-                className="w-full p-2 border rounded-md"
-                value={formData.notes}
-                onChange={handleInputChange}
-              ></textarea>
-            </div>
+            <h3 className="text-lg font-semibold">Notes</h3>
+            <textarea
+              placeholder="Additional Notes"
+              value={formData.notes}
+              onChange={(e) =>
+                setFormData((prevData) => ({
+                  ...prevData,
+                  notes: e.target.value,
+                }))
+              }
+              className="w-full p-2 border rounded-md"
+            ></textarea>
           </div>
-
-          {/* Footer Buttons */}
-          <div className="flex justify-end space-x-4 mt-4 sticky bottom-0 bg-white py-2">
+          <div className="flex justify-end mt-4 gap-2">
             <button
               type="button"
               onClick={closeModal}
               className="px-4 py-2 bg-gray-500 text-white rounded-md"
             >
-              <MdCancel className="inline mr-2" /> Cancel
+              Cancel
             </button>
             <button
               type="submit"
