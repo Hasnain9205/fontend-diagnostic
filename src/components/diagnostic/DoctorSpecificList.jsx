@@ -11,9 +11,9 @@ const DoctorSpecificList = () => {
   const [search, setSearch] = useState("");
   const [district, setDistrict] = useState("");
   const [upazila, setUpazila] = useState("");
-  const centerId = useParams();
+  const { centerId } = useParams();
   console.log("centerId", centerId);
-  console.log("centerId", doctors);
+  console.log("doctors", doctors);
   // Apply initial filtering on load
   useEffect(() => {
     setFilteredDoctors(doctors);
@@ -54,14 +54,10 @@ const DoctorSpecificList = () => {
       return;
     }
 
-    if (centerId) {
-      navigate(`/appointments/${doctorId}`, {
-        state: { centerId },
-        replace: true,
-      });
-    } else {
-      navigate(`/appointments/${doctorId}`, { replace: true });
-    }
+    navigate(`/appointments/${doctorId}`, {
+      state: centerId ? { centerId } : {},
+      replace: true,
+    });
   };
 
   return (
@@ -130,7 +126,7 @@ const DoctorSpecificList = () => {
               </p>
               <p className="text-gray-700 mt-1">Fees: ${doctor.fees}</p>
               <button
-                onClick={() => handleBookDoctor(doctor._id, centerId)}
+                onClick={() => handleBookDoctor(doctor._id)}
                 className="bg-[#47ccc8] text-white px-4 py-2 mt-4 w-full rounded-lg hover:bg-blue-700"
               >
                 Book Appointment

@@ -7,7 +7,7 @@ import {
 } from "../../Utils"; // Utility functions
 
 const useAxios = axios.create({
-  baseURL: "https://backend-diagnostic-4.onrender.com/api", // API base URL, can be set in .env file
+  baseURL: "http://localhost:5001/api", // API base URL, can be set in .env file
   headers: {
     "Content-Type": "application/json",
   },
@@ -41,12 +41,9 @@ useAxios.interceptors.response.use(
       originalRequest._retry = true;
       try {
         const refreshToken = getRefreshToken(); // Retrieve refresh token
-        const res = await axios.post(
-          `https://backend-diagnostic-4.onrender.com/api/refreshToken`,
-          {
-            token: refreshToken,
-          }
-        );
+        const res = await axios.post(`http://localhost:5001/api/refreshToken`, {
+          token: refreshToken,
+        });
         const newAccessToken = res.data.accessToken;
 
         setAccessToken(newAccessToken); // Save the new access token

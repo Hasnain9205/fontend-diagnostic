@@ -85,12 +85,26 @@ const TestDetails = () => {
       });
 
       navigate("/testAppointment");
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: error.response?.data?.message || "Something went wrong.",
-      });
+    } catch (err) {
+      // Check if error is due to a past date
+      if (
+        err.response?.data?.message ===
+        "Cannot book an Doctor appointment for a past date"
+      ) {
+        Swal.fire({
+          icon: "error",
+          title: "Invalid Date",
+          text: "You cannot book an appointment for a past date.",
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Booking Failed",
+          text:
+            err.response?.data?.message ||
+            "There was an error booking the appointment. Please try again.",
+        });
+      }
     }
   };
 

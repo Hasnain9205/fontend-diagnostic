@@ -89,7 +89,7 @@ export default function AllDoctor() {
         (doc) => doc._id === currentDoctor._id
       );
       const updatedSlots = [
-        ...(existingDoctor.bookedSlots || []),
+        ...(existingDoctor.slots_booked || []),
         { slotDate, slotTime },
       ];
 
@@ -102,7 +102,7 @@ export default function AllDoctor() {
         about,
         fees,
         address,
-        bookedSlots: updatedSlots,
+        slots: updatedSlots,
       };
 
       const token = getAccessToken();
@@ -177,7 +177,6 @@ export default function AllDoctor() {
                     "No Image"
                   )}
                 </td>
-
                 <td className="border px-4 py-2">{doctor.name}</td>
                 <td className="border px-4 py-2">{doctor.speciality}</td>
                 <td className="border px-4 py-2">{doctor.email}</td>

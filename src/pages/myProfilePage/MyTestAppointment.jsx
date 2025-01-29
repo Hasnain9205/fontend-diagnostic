@@ -39,12 +39,13 @@ export const MyTestAppointment = () => {
 
     fetchAppointments();
   }, []);
+  console.log("ap...", appointments);
 
   // Calculate total amount for unpaid appointments
   const totalAmount = appointments.reduce(
     (sum, appointment) =>
       appointment.paymentStatus === "unpaid"
-        ? sum + appointment.testId.price
+        ? sum + appointment.testId?.price
         : sum,
     0
   );
@@ -165,18 +166,18 @@ export const MyTestAppointment = () => {
             </tr>
           </thead>
           <tbody>
-            {appointments.map((appointment) => (
+            {appointments?.map((appointment) => (
               <tr key={appointment._id} className="border-t border-gray-200">
-                <td className="py-4 px-6">{appointment.testId.name}</td>
-                <td className="py-4 px-6">{appointment.testId.category}</td>
+                <td className="py-4 px-6">{appointment.testId?.name}</td>
+                <td className="py-4 px-6">{appointment.testId?.category}</td>
                 <td className="py-4 px-6">
                   {format(
                     new Date(appointment.appointmentDate),
                     "MMM dd, yyyy"
                   )}
                 </td>
-                <td className="py-4 px-6">{appointment.appointmentTime}</td>
-                <td className="py-4 px-6">${appointment.testId.price}</td>
+                <td className="py-4 px-6">{appointment?.appointmentTime}</td>
+                <td className="py-4 px-6">${appointment.testId?.price}</td>
                 <td className="py-4 px-6">
                   <span
                     className={`inline-block px-3 py-1 rounded-full text-sm ${
