@@ -15,8 +15,7 @@ export default function Appointments() {
   const [availableSlots, setAvailableSlots] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  console.log("docs", doctor);
-  console.log("Location state:", location.state);
+
   const centerId =
     location.state?.centerId?._id ||
     location.state?.centerId ||
