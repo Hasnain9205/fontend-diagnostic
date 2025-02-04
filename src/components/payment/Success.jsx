@@ -22,12 +22,15 @@ const Success = () => {
           appointmentId: appointmentIds.split(","),
           sessionId,
         });
-
+        console.log("Payment API Response:", response.data);
         if (response.data && response.data.result) {
           setPaymentDetails(response.data); // Setting the response to state
           setPaymentSuccess(true); // Update payment success state
         } else {
           throw new Error("Invalid response data");
+        }
+        if (!response.data || !response.data.result) {
+          throw new Error("Missing expected data in response");
         }
       } catch (error) {
         console.error("Error fetching payment details:", error);

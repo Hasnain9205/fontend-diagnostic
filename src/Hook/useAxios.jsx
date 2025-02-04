@@ -7,7 +7,7 @@ import {
 } from "../../Utils"; // Utility functions
 
 const useAxios = axios.create({
-  baseURL: "https://backend-diagnostic.onrender.com/api", // API base URL, can be set in .env file
+  baseURL: "http://localhost:5001/api", // API base URL, can be set in .env file
   headers: {
     "Content-Type": "application/json",
   },
