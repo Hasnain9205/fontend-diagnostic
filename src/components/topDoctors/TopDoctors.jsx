@@ -19,6 +19,7 @@ export default function TopDoctors() {
     };
     fetchDoctors();
   }, []);
+
   const handleBookDoctor = (docId) => {
     const token = getAccessToken();
     if (!token) {
@@ -32,8 +33,10 @@ export default function TopDoctors() {
     <div className="mt-20">
       <div className="flex flex-col justify-center items-center">
         <p className="text-xl font-bold text-[#47ccc8]">Our Team</p>
-        <h1 className="font-extrabold text-4xl mt-2">Visit Our Top Doctors</h1>
-        <p className="w-[850px] mt-4 text-center">
+        <h1 className="font-extrabold text-4xl mt-2 text-center">
+          Visit Our Top Doctors
+        </h1>
+        <p className="w-full sm:w-[850px] md:w-[600px] mt-4 text-center">
           Our expert doctors provide specialized care in various fields,
           including cardiology, dermatology, neurology, and pediatrics. With
           years of experience and dedication, they ensure the best medical
@@ -44,7 +47,7 @@ export default function TopDoctors() {
         {doctors?.slice(0, 6).map((doctor, index) => (
           <div
             key={index}
-            className="card card-compact bg-base-100 w-96 shadow-xl cursor-pointer flex-shrink-0 hover:translate-y-[-10px] transition-all duration-500"
+            className="card card-compact bg-base-100 w-80 sm:w-96 shadow-xl cursor-pointer flex-shrink-0 hover:translate-y-[-10px] transition-all duration-500"
           >
             <figure>
               <img

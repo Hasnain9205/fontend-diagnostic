@@ -70,7 +70,6 @@ export default function Register() {
     }
   };
 
-  // Handle profile image preview
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -80,16 +79,16 @@ export default function Register() {
 
   return (
     <div className="hero mt-10">
-      <div className="hero-content flex border-2 shrink-0 shadow-2xl bg-white p-4 rounded-lg">
-        <div className="w-1/2">
-          <img src={loginImg} alt="register" />
+      <div className="hero-content flex flex-col lg:flex-row border-2 shrink-0 shadow-2xl bg-white p-4 rounded-lg">
+        <div className="w-full lg:w-1/2">
+          <img src={loginImg} alt="register" className="w-full" />
         </div>
-        <div className="w-1/2 p-6">
+        <div className="w-full lg:w-1/2 p-6">
           <h2 className="text-4xl font-semibold text-center text-[#47ccc8] mb-6">
             Create Your Account
           </h2>
           <form onSubmit={handleRegister}>
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <div className="form-control mb-4 flex-1">
                 <label className="label-text font-medium">Name</label>
                 <input
@@ -111,7 +110,7 @@ export default function Register() {
                 />
               </div>
             </div>
-            <div className=" flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <div className="form-control mb-4 flex-1">
                 <label className="label-text font-medium">Password</label>
                 <input
@@ -133,7 +132,7 @@ export default function Register() {
                 />
               </div>
             </div>
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <div className="form-control mb-4 flex-1">
                 <label className="label-text font-medium">District</label>
                 <input
@@ -155,7 +154,7 @@ export default function Register() {
                 />
               </div>
             </div>
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <div className="form-control mb-4 flex-1">
                 <label className="label-text font-medium">Phone Number</label>
                 <input
@@ -181,7 +180,7 @@ export default function Register() {
                 </select>
               </div>
             </div>
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <div className="form-control mb-4 flex-1">
                 <label className="label-text font-medium">Profile Image</label>
                 <input
@@ -202,7 +201,7 @@ export default function Register() {
                 )}
               </div>
               <div className="form-control mb-4 flex-1">
-                <label className="label-text font-medium">age</label>
+                <label className="label-text font-medium">Age</label>
                 <input
                   type="number"
                   name="age"
@@ -221,7 +220,7 @@ export default function Register() {
                 {loading ? (
                   <>
                     <ClipLoader loading={loading} size={20} />
-                    <span className="ml-2 text-black">Ragistering...</span>
+                    <span className="ml-2 text-black">Registering...</span>
                   </>
                 ) : (
                   "Register"

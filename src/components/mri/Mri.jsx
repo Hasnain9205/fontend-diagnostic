@@ -35,34 +35,41 @@ const features = [
 export default function Mri() {
   return (
     <div
-      className="mt-20 lg:flex gap-20 bg-cover bg-center bg-no-repeat lg:p-20 rounded-md"
+      className="mt-20 bg-cover bg-center bg-no-repeat p-6 md:p-12 lg:p-20 rounded-md flex flex-col lg:flex-row gap-10"
       style={{ backgroundImage: `url(${waves})` }}
     >
-      <div>
-        <h1 className="text-4xl font-bold text-[#47ccc8]">
+      {/* Left Section */}
+      <div className="flex-1">
+        <h1 className="text-3xl md:text-4xl font-bold text-[#47ccc8]">
           The most modern <br />
           <span className="text-blue-950">MRI scanner testing</span>
         </h1>
-        <p className="w-[800px] mt-4">
+        <p className="mt-4 text-sm md:text-base lg:w-[500px]">
           Technique used in radiology to form pictures of the anatomy and the
           physiological processes of the body in both health and disease.
         </p>
-        <div className="grid lg:grid-cols-2 mt-8 gap-8">
+
+        {/* Features Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
           {features.map((feature, index) => (
             <div key={index} className="flex items-start gap-4">
               {feature.icon}
               <div>
-                <h2 className="text-3xl font-bold">{feature.title}</h2>
-                <p>{feature.description}</p>
+                <h2 className="text-xl md:text-2xl font-bold">
+                  {feature.title}
+                </h2>
+                <p className="text-sm md:text-base">{feature.description}</p>
               </div>
             </div>
           ))}
         </div>
       </div>
-      <div className="relative">
-        <img className="w-full" src={mri} alt="MRI Scanner" />
+
+      {/* Right Section (MRI Images) */}
+      <div className="flex-1 relative flex justify-center">
+        <img className="w-72 md:w-96 lg:w-full" src={mri} alt="MRI Scanner" />
         <img
-          className="absolute top-0 right-0 w-32"
+          className="absolute top-0 right-0 w-20 md:w-28 lg:w-32"
           src={mriDoc}
           alt="MRI Doctor"
         />
