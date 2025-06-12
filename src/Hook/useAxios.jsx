@@ -7,7 +7,7 @@ import {
 } from "../../Utils";
 
 const useAxios = axios.create({
-  baseURL: "https://backend-diagnostic-2.onrender.com/api",
+  baseURL: "https://backend-diagnostic-project.onrender.com/api",
   withCredentials: true,
 });
 
@@ -36,7 +36,7 @@ useAxios.interceptors.response.use(
 
         console.log("Attempting token refresh...");
         const res = await axios.post(
-          "https://backend-diagnostic-2.onrender.com/api/users/refreshToken",
+          "https://backend-diagnostic-project.onrender.com/api/users/refreshToken",
           { token: refreshToken }
         );
 
