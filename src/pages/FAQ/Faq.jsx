@@ -8,7 +8,7 @@ export default function Faq() {
           </h1>
 
           <div className="grid grid-cols-1 gap-8 mt-8 lg:mt-16 md:grid-cols-2 xl:grid-cols-3">
-            <div>
+            <div data-aos="fade-right" data-aos-duration="1000">
               <div className="inline-block p-3 text-white bg-blue-600 rounded-lg">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +40,7 @@ export default function Faq() {
               </div>
             </div>
 
-            <div>
+            <div data-aos="fade-up" data-aos-duration="1000">
               <div className="inline-block p-3 text-white bg-blue-600 rounded-lg">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -72,7 +72,7 @@ export default function Faq() {
               </div>
             </div>
 
-            <div>
+            <div data-aos="fade-left" data-aos-duration="1000">
               <div className="inline-block p-3 text-white bg-blue-600 rounded-lg">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -104,7 +104,7 @@ export default function Faq() {
               </div>
             </div>
 
-            <div>
+            <div data-aos="fade-right" data-aos-duration="1000">
               <div className="inline-block p-3 text-white bg-blue-600 rounded-lg">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -137,7 +137,7 @@ export default function Faq() {
               </div>
             </div>
 
-            <div>
+            <div data-aos="fade-down" data-aos-duration="1000">
               <div className="inline-block p-3 text-white bg-blue-600 rounded-lg">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -169,7 +169,7 @@ export default function Faq() {
               </div>
             </div>
 
-            <div>
+            <div data-aos="fade-left" data-aos-duration="1000">
               <div className="inline-block p-3 text-white bg-blue-600 rounded-lg">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

@@ -1,8 +1,4 @@
-import { useContext } from "react";
-import { AuthContext } from "../../components/provider/AuthProvider";
-
 export default function About() {
-  const { user } = useContext(AuthContext);
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
@@ -11,8 +7,9 @@ export default function About() {
         </h1>
 
         <p className="text-gray-700 mb-4">
-          Welcome to <span className="font-semibold">[Your Project Name]</span>!
-          We are dedicated to providing high-quality diagnostic and healthcare
+          Welcome to{" "}
+          <span className="font-semibold">Medicare management system</span>! We
+          are dedicated to providing high-quality diagnostic and healthcare
           services with professionalism and care. Our mission is to make
           healthcare accessible, accurate, and patient-friendly through
           innovative solutions.
@@ -55,9 +52,9 @@ export default function About() {
           appointment:
         </p>
         <ul className="text-gray-700">
-          <li>📞 Phone: {user.phone}</li>
-          <li>📧 Email: {user.email}</li>
-          <li>📍 Address: {user.address}</li>
+          <li>📞 Phone: +103994894</li>
+          <li>📧 Email: Medicare@gamil.com</li>
+          <li>📍 Address: Dhaka,Bangladesh</li>
         </ul>
       </div>
     </div>

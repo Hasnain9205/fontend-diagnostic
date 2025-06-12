@@ -51,7 +51,7 @@ export default function AllDiagnostic() {
     );
 
   return (
-    <div className="bg-gray-100 p-4 mt-10">
+    <div id="diagnosticServices" className="bg-gray-100 p-4 mt-20">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold text-center mb-6">
           Diagnostic Centers
@@ -67,6 +67,8 @@ export default function AllDiagnostic() {
               <div
                 key={diag._id}
                 className="bg-white p-4 rounded-lg shadow hover:shadow-lg transition"
+                data-aos="flip-left"
+                data-aos-duration="1000"
               >
                 <img
                   src={diag.profileImage || "default-image.jpg"}
@@ -87,7 +89,7 @@ export default function AllDiagnostic() {
                 </p>
                 <button
                   onClick={() => handleDetails(diag._id)}
-                  className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                  className="mt-6 w-full bg-[#47ccc8] font-bold hover:text-white py-2 rounded-md shadow-md hover:bg-blue-950 transition duration-300"
                 >
                   View Details
                 </button>

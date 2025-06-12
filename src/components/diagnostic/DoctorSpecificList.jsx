@@ -67,7 +67,7 @@ const DoctorSpecificList = () => {
       </h1>
 
       {/* Filter and search section */}
-      <div className="flex flex-wrap justify-center space-x-4 mt-8 mb-6">
+      <div className="flex gap-4 flex-wrap justify-center space-x-4 mt-8 mb-6">
         <input
           type="text"
           placeholder="Search by speciality"

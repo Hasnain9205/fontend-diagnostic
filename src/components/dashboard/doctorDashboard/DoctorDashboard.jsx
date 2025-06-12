@@ -114,35 +114,35 @@ const DoctorDashboard = () => {
   console.log("dds", dashboardData);
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className="max-w-6xl mx-auto py-8">
-        <h1 className="text-3xl font-bold text-center mb-6">
+      <div className="max-w-full lg:max-w-6xl mx-auto py-8">
+        <h1 className="lg:text-3xl font-bold lg:text-center mb-6">
           Doctor Dashboard
         </h1>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white shadow-md rounded-lg p-6 text-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="bg-white shadow-md w-60 lg:w-full rounded-lg p-6 text-center">
             <h2 className="text-2xl font-bold text-blue-600">
               ${dashboardData.earnings}
             </h2>
             <p className="text-gray-600">Total Earnings</p>
           </div>
-          <div className="bg-white shadow-md rounded-lg p-6 text-center">
+          <div className="bg-white shadow-md rounded-lg p-6 text-center w-60 lg:w-full">
             <h2 className="text-2xl font-bold text-green-600">
               {dashboardData.appointments}
             </h2>
             <p className="text-gray-600">Total Appointments</p>
           </div>
-          <div className="bg-white shadow-md rounded-lg p-6 text-center">
+          <div className="bg-white shadow-md rounded-lg p-6 text-center w-60 lg:w-full">
             <h2 className="text-2xl font-bold text-purple-600">
               {dashboardData.patients}
             </h2>
             <p className="text-gray-600">Unique Patients</p>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-          <div className="bg-white shadow-md rounded-lg p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 ">
+          <div className="bg-white shadow-md rounded-lg p-6 w-60 lg:w-full">
             <Bar data={barChartData} />
           </div>
-          <div className="bg-white shadow-md rounded-lg p-6">
+          <div className="bg-white shadow-md rounded-lg p-6 w-60 lg:w-full">
             <Line
               data={lineChartData}
               options={{
@@ -165,13 +165,25 @@ const DoctorDashboard = () => {
             <table className="table-auto w-full border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-gray-200">
-                  <th className="px-4 py-2 border border-gray-300">Image</th>
-                  <th className="px-4 py-2 border border-gray-300">Patient</th>
-                  <th className="px-4 py-2 border border-gray-300">Email</th>
-                  <th className="px-4 py-2 border border-gray-300">Phone</th>
-                  <th className="px-4 py-2 border border-gray-300">Address</th>
+                  <th className="px-4 py-2 border border-gray-300 hidden sm:table-cell">
+                    Image
+                  </th>
+                  <th className="px-4 py-2 border border-gray-300 hidden sm:table-cell">
+                    Patient
+                  </th>
+                  <th className="px-4 py-2 border border-gray-300 hidden sm:table-cell">
+                    Email
+                  </th>
+                  <th className="px-4 py-2 border border-gray-300 hidden sm:table-cell">
+                    Phone
+                  </th>
+                  <th className="px-4 py-2 border border-gray-300 hidden sm:table-cell">
+                    Address
+                  </th>
                   <th className="px-4 py-2 border border-gray-300">Date</th>
-                  <th className="px-4 py-2 border border-gray-300">Time</th>
+                  <th className="px-4 py-2 border border-gray-300 hidden sm:table-cell">
+                    Time
+                  </th>
                   <th className="px-4 py-2 border border-gray-300">Status</th>
                 </tr>
               </thead>
@@ -189,7 +201,7 @@ const DoctorDashboard = () => {
                       key={index}
                       className="odd:bg-white even:bg-gray-50 text-center"
                     >
-                      <td className="px-4 py-2 border border-gray-300">
+                      <td className="px-4 py-2 border border-gray-300 hidden sm:table-cell">
                         {appointment.userId?.profileImage ? (
                           <img
                             src={appointment.userId.profileImage}
@@ -200,23 +212,23 @@ const DoctorDashboard = () => {
                           "N/A"
                         )}
                       </td>
-                      <td className="px-4 py-2 border border-gray-300">
+                      <td className="px-4 py-2 border border-gray-300 hidden sm:table-cell">
                         {appointment.userId?.name || "N/A"}
                       </td>
-                      <td className="px-4 py-2 border border-gray-300">
+                      <td className="px-4 py-2 border border-gray-300 hidden sm:table-cell">
                         {appointment.userId?.email || "N/A"}
                       </td>
-                      <td className="px-4 py-2 border border-gray-300">
+                      <td className="px-4 py-2 border border-gray-300 hidden sm:table-cell">
                         {appointment.userId?.phone || "N/A"}
                       </td>
-                      <td className="px-4 py-2 border border-gray-300">
+                      <td className="px-4 py-2 border border-gray-300 hidden sm:table-cell">
                         {appointment.userId?.address || "N/A"}
                       </td>
 
-                      <td className="px-4 py-2 border border-gray-300">
+                      <td className="px-4 py-2 border border-gray-300 ">
                         {new Date(appointment.slotDate).toLocaleDateString()}
                       </td>
-                      <td className="px-4 py-2 border border-gray-300">
+                      <td className="px-4 py-2 border border-gray-300 hidden sm:table-cell">
                         {appointment.slotTime}
                       </td>
                       <td

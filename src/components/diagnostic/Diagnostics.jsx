@@ -61,7 +61,11 @@ export default function Diagnostics() {
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold text-center  mb-6">All Diagnostic</h1>
         {/* Search Section */}
-        <div className="bg-white p-4 rounded-lg shadow mb-6">
+        <div
+          className="bg-white p-4 rounded-lg shadow mb-6"
+          data-aos="fade-right"
+          data-aos-duration="1000"
+        >
           <div className="flex items-center space-x-2 mb-3">
             <MdOutlineSearch className="text-2xl text-gray-400" />
             <input
@@ -116,6 +120,8 @@ export default function Diagnostics() {
               <div
                 key={diag._id}
                 className="bg-white p-4 rounded-lg shadow hover:shadow-lg transition"
+                data-aos="flip-right"
+                data-aos-duration="1000"
               >
                 <img
                   src={diag.profileImage || "default-image.jpg"}
@@ -137,7 +143,7 @@ export default function Diagnostics() {
                 </p>
                 <button
                   onClick={() => handleDetails(diag._id)}
-                  className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                  className="mt-6 w-full bg-[#47ccc8] font-bold hover:text-white py-2 rounded-md shadow-md hover:bg-blue-950 transition duration-300"
                 >
                   View Details
                 </button>

@@ -113,7 +113,7 @@ export const AddTest = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-8 p-6 bg-white shadow-md rounded-lg dark:bg-gray-800">
+    <div className="max-w-4xl mx-auto mt-8 p-2 bg-white shadow-md rounded-lg dark:bg-gray-800">
       <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-4">
         Add Test
       </h2>
@@ -228,7 +228,7 @@ export const AddTest = () => {
 
         <button
           type="submit"
-          className="bg-blue-500 text-white p-2 rounded-lg w-full"
+          className="btn btn-square  hover:text-white bg-[#47ccc8] rounded-lg shadow-lg flex items-center justify-center hover:bg-blue-950 w-full  "
         >
           {loading ? (
             <ClipLoader size={20} color="white" loading={true} />

@@ -134,7 +134,7 @@ export default function AdminDashboard() {
         />
         <StatCard
           icon={<FaBook className="w-8" />}
-          label="Patients className:"
+          label="Patients"
           count={dashboardData.patients || 0}
         />
         <StatCard
@@ -209,14 +209,14 @@ function AppointmentCard({ appointment }) {
             {appointment.docId?.name || "Unknown Doctor"}
           </h4>
           <p className="text-sm text-gray-600">
-            {appointment.docId?.specialty || "N/A"}
+            {appointment.docData?.specialty || "N/A"}
           </p>
           <p className="text-sm text-gray-600 font-medium">
             {appointment.docId?.fees || "N/A"} Taka
           </p>
         </div>
       </div>
-      <div className="text-right">
+      <div className="text-right mt-8">
         <p className="text-sm text-gray-600">{appointment.slotDate || "N/A"}</p>
         <p className="text-sm text-gray-600">{appointment.slotTime || "N/A"}</p>
       </div>

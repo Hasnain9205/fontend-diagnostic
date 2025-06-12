@@ -117,10 +117,10 @@ const Appointment = () => {
 
   return (
     <div>
-      <h2 className="text-3xl font-semibold text-center">
+      <h2 className="lg:text-3xl font-semibold lg:text-center">
         Doctors Appointment
       </h2>
-      <h1 className="text-blue-700 font-bold text-xl">
+      <h1 className="text-blue-700 mt-1 lg:font-bold lg:text-xl">
         Total Appointments: {appointments.length}
       </h1>
       {loading ? (
@@ -132,25 +132,25 @@ const Appointment = () => {
           <table className="w-full border-collapse bg-white shadow-lg rounded-lg overflow-hidden">
             <thead className="bg-[#47ccc8]">
               <tr>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600 border">
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600 border hidden sm:table-cell">
                   Image
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600 border">
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600 border hidden sm:table-cell">
                   Patient
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600 border">
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600 border hidden sm:table-cell">
                   Doctor
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600 border">
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600 border ">
                   Slot Date
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600 border">
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600 border hidden sm:table-cell">
                   Slot Time
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600 border">
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600 border hidden sm:table-cell">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-600 border">
+                <th className="px-2 py-3 text-left text-sm font-medium text-gray-600 border">
                   Action
                 </th>
               </tr>
@@ -163,7 +163,7 @@ const Appointment = () => {
                     idx % 2 === 0 ? "bg-gray-100" : "bg-white"
                   } hover:bg-blue-100`}
                 >
-                  <td className="px-4 py-2 border">
+                  <td className="px-4 py-2 border hidden sm:table-cell">
                     {app.userId?.profileImage ? (
                       <img
                         src={app.userId.profileImage}
@@ -174,17 +174,19 @@ const Appointment = () => {
                       "N/A"
                     )}
                   </td>
-                  <td className="px-4 py-2 border">
+                  <td className="px-4 py-2 border hidden sm:table-cell">
                     {app.userId?.name || "N/A"}
                   </td>
-                  <td className="px-4 py-2 border">
+                  <td className="px-4 py-2 border hidden sm:table-cell">
                     {app.docData?.name || "N/A"}
                   </td>
-                  <td className="px-4 py-2 border">
+                  <td className="px-2 py-2 border">
                     {new Date(app.slotDate).toLocaleDateString()}
                   </td>
-                  <td className="px-4 py-2 border">{app.slotTime || "N/A"}</td>
-                  <td className="px-4 py-2 border">
+                  <td className="px-4 py-2 border hidden sm:table-cell">
+                    {app.slotTime || "N/A"}
+                  </td>
+                  <td className="px-4 py-2 border hidden sm:table-cell">
                     <span
                       className={`px-2 py-1 rounded-full text-base font-semibold ${
                         app.status === "completed"
@@ -197,7 +199,7 @@ const Appointment = () => {
                       {app.status || "Unknown"}
                     </span>
                   </td>
-                  <td className="px-4 py-2 border">
+                  <td className="px-2 py-2 border">
                     {app.status === "completed" && (
                       <button
                         onClick={() =>
@@ -207,7 +209,7 @@ const Appointment = () => {
                             app.centerId?._id
                           )
                         }
-                        className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+                        className="flex items-center px-2 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
                       >
                         <MdLocalHospital className="mr-2" />
                         Prescription

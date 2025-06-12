@@ -1,8 +1,4 @@
-import { useContext } from "react";
-import { AuthContext } from "../../components/provider/AuthProvider";
-
 export default function Contact() {
-  const { user } = useContext(AuthContext);
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
@@ -22,9 +18,9 @@ export default function Contact() {
               Our Contact Details
             </h2>
             <ul className="text-gray-700">
-              <li>📞 Phone: {user.phone}</li>
-              <li>📧 Email: {user.email}</li>
-              <li>📍 Address: {user.address}</li>
+              <li>📞 Phone: +103994894</li>
+              <li>📧 Email: Medicare@gamil.com</li>
+              <li>📍 Address: Dhaka,Bangladesh</li>
             </ul>
           </div>
 

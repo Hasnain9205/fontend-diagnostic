@@ -123,7 +123,7 @@ export default function AllDiagnosticsAdmin() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
+    <div className="min-h-screen bg-gray-100 p-2">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold text-center text-blue-600 mb-6">
           Admin Manage Diagnostics
@@ -135,17 +135,21 @@ export default function AllDiagnosticsAdmin() {
             <table className="table-auto w-full">
               <thead className="bg-blue-600 text-white">
                 <tr>
-                  <th className="px-4 py-2">Image</th>
+                  <th className="border px-3 py-2 hidden sm:table-cell">
+                    Image
+                  </th>
                   <th className="px-4 py-2">Name</th>
                   <th className="px-4 py-2">District</th>
-                  <th className="px-4 py-2">Upazila</th>
+                  <th className=" border px-3 py-2 hidden sm:table-cell ">
+                    Upazila
+                  </th>
                   <th className="px-4 py-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {diagnostics.map((diag) => (
                   <tr key={diag._id} className="border-b hover:bg-gray-50">
-                    <td className="px-4 py-2">
+                    <td className="border px-3 py-2 hidden sm:table-cell">
                       <img
                         src={diag.profileImage || "path/to/default/image.png"}
                         alt={diag.name}
@@ -154,7 +158,9 @@ export default function AllDiagnosticsAdmin() {
                     </td>
                     <td className="px-4 py-2">{diag.name}</td>
                     <td className="px-4 py-2">{diag.district}</td>
-                    <td className="px-4 py-2">{diag.upazila}</td>
+                    <td className="border px-3 py-2 hidden sm:table-cell">
+                      {diag.upazila}
+                    </td>
                     <td className=" flex justify-center items-center py-6 space-x-4">
                       <button
                         onClick={() => handleViewDetails(diag)}

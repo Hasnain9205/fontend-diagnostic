@@ -158,25 +158,28 @@ export default function GetDoctor() {
 
   return (
     <div>
-      <div className="container mx-auto mt-10">
-        <h2 className="text-2xl font-bold text-center mb-4">All Doctors</h2>
+      <div className="container mx-auto mt-4">
+        <h2 className="lg:text-2xl text-xl font-bold text-center mb-4">
+          All Doctors
+        </h2>
         <table className="table-auto w-full border-collapse border border-gray-200">
           <thead>
             <tr className="bg-gray-100">
-              <th className="border px-4 py-2">#</th>
-              <th className="border px-4 py-2">Image</th>
-              <th className="border px-4 py-2">Name</th>
-              <th className="border px-4 py-2">Speciality</th>
-              <th className="border px-4 py-2">Email</th>
-              <th className="border px-4 py-2">Delete</th>
-              <th className="border px-4 py-2">Update</th>
+              <th className="border px-2 py-2  hidden sm:table-cell">#</th>
+              <th className="border px-2 py-2 hidden sm:table-cell">Image</th>
+              <th className="border px-2 py-2">Name</th>
+              <th className="border px-2 py-2 ">Speciality</th>
+              <th className="border px-2 py-2  hidden sm:table-cell">Email</th>
+              <th className="border px-2 py-2">Action</th>
             </tr>
           </thead>
           <tbody>
             {doctors.map((doctor, index) => (
               <tr key={doctor._id} className="hover:bg-gray-50">
-                <td className="border px-4 py-2 text-center">{index + 1}</td>
-                <td className="border px-4 py-2">
+                <td className="border px-2 py-2 text-center hidden sm:table-cell">
+                  {index + 1}
+                </td>
+                <td className="border px-2 py-2 hidden sm:table-cell">
                   {doctor.profileImage ? (
                     <img
                       src={doctor.profileImage}
@@ -188,20 +191,21 @@ export default function GetDoctor() {
                   )}
                 </td>
 
-                <td className="border px-4 py-2">{doctor.name}</td>
-                <td className="border px-4 py-2">{doctor.speciality}</td>
-                <td className="border px-4 py-2">{doctor.email}</td>
-                <td className="border px-4 py-2 text-center">
+                <td className="border px-2 py-2">{doctor.name}</td>
+                <td className="border px-2 py-2">{doctor.speciality}</td>
+                <td className="border px-2 py-2 hidden sm:table-cell">
+                  {doctor.email}
+                </td>
+                <td className="border text-center">
                   <button
-                    className="text-black text-2xl hover:text-red-500"
+                    className="text-red-500 text-2xl p-2 hover:text-black"
                     onClick={() => handleDelete(doctor._id)}
                   >
                     <MdDelete />
                   </button>
-                </td>
-                <td className="border px-4 py-2 text-center">
+
                   <button
-                    className="hover:text-green-500 text-2xl"
+                    className="hover:text-green-500 p-2 text-2xl"
                     onClick={() => handleEdit(doctor)}
                   >
                     <MdSystemUpdateAlt />
@@ -214,7 +218,7 @@ export default function GetDoctor() {
 
         {isEditing && (
           <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-full mx-4">
               <h3 className="text-xl font-bold mb-4">Update Doctor</h3>
               <form onSubmit={handleUpdate}>
                 {[

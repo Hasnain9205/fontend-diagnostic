@@ -77,7 +77,11 @@ export default function Doctors() {
       </h1>
 
       {/* Filter and search section */}
-      <div className="flex flex-wrap justify-center space-x-4 mt-8 mb-6">
+      <div
+        className="flex gap-4 flex-wrap justify-center space-x-4 mt-8 mb-6"
+        data-aos="zoom-in"
+        data-aos-duration="1000"
+      >
         <input
           type="text"
           placeholder="Search by speciality"
@@ -120,6 +124,8 @@ export default function Doctors() {
             <div
               key={doctor._id}
               className="bg-white shadow-lg rounded-lg p-4 border hover:shadow-xl"
+              data-aos="flip-left"
+              data-aos-duration="1000"
             >
               <img
                 src={doctor.profileImage || "/default-image.jpg"}

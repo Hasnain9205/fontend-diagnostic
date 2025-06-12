@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useAxios from "../../Hook/useAxios";
 import {
   getAccessToken,
   getRefreshToken,
@@ -8,130 +9,118 @@ import {
   setAccessToken,
   setRefreshToken,
 } from "../../../Utils";
-import useAxios from "../../Hook/useAxios"; // Your Axios instance
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isRefreshing, setIsRefreshing] = useState(false); // Prevent multiple refreshes
   const navigate = useNavigate();
 
-  // Login function
+  // 🔹 Login Function
   const login = async (email, password) => {
     try {
       setLoading(true);
       const response = await useAxios.post("/users/login", { email, password });
       const { accessToken, refreshToken, user: userData } = response.data;
 
-      setUser(userData); // Set user data
-      setAccessToken(accessToken); // Store access token
-      setRefreshToken(refreshToken); // Store refresh token
+      setUser(userData);
+      setAccessToken(accessToken);
+      setRefreshToken(refreshToken);
       return userData.role;
     } catch (error) {
-      console.error("Error fetching profile:", error.message);
-      if (error.response?.status === 401 || error.response?.status === 403) {
-        await handleTokenRefresh(); // Refresh token if expired
-      } else {
-        logout(); // Logout if any other error occurs
-      }
+      console.error("Login Error:", error.response?.data || error.message);
+      logout();
     } finally {
       setLoading(false);
     }
   };
 
-  // Get user profile function
+  // 🔹 Get User Profile
   const getProfile = async () => {
-    setLoading(true);
     try {
-      const token = getAccessToken();
-      if (!token) throw new Error("No token available");
-
+      setLoading(true);
       const response = await useAxios.get("/users/profile", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${getAccessToken()}` },
       });
       setUser(response.data.user);
     } catch (error) {
-      console.error("Error fetching profile:", error.message);
-      if (error.response?.status === 401 || error.response?.status === 403) {
-        await handleTokenRefresh(); // Refresh token if expired
-      } else {
-        logout(); // Logout if any other error occurs
-      }
+      console.error(
+        "Profile Fetch Error:",
+        error.response?.data || error.message
+      );
+      logout();
     } finally {
       setLoading(false);
     }
   };
 
-  // Handle token refresh
+  // 🔹 Refresh Token Handler
   const handleTokenRefresh = async () => {
-    if (isRefreshing) return; // Prevent multiple refresh attempts at the same time
-    setIsRefreshing(true);
-
     try {
       const refreshToken = getRefreshToken();
       if (!refreshToken) {
-        console.error("No refresh token available");
+        console.warn("No refresh token available.");
         logout();
         return;
       }
 
-      console.log("Refreshing token with:", refreshToken);
-
+      console.log("Refreshing token...");
       const response = await useAxios.post("/users/refreshToken", {
-        refreshToken,
+        token: refreshToken,
       });
 
-      console.log("Token refresh response:", response.data);
-
       if (response.data.accessToken) {
-        setAccessToken(response.data.accessToken); // Store new access token
-        await getProfile(); // Fetch the profile after the token refresh
+        setAccessToken(response.data.accessToken);
+        await getProfile();
       } else {
-        console.error("Refresh token invalid or expired");
-        logout(); // Log out if the refresh token is invalid
+        console.warn("Refresh token expired or invalid.");
+        logout();
       }
     } catch (error) {
-      console.error("Token refresh failed:", error.message);
-      logout(); // Log out if token refresh fails
-    } finally {
-      setIsRefreshing(false);
+      console.error(
+        "Token Refresh Error:",
+        error.response?.data || error.message
+      );
+      logout();
     }
   };
 
-  // Logout function
+  // 🔹 Logout Function
   const logout = () => {
-    console.error("Token expired or invalid, logging out...");
     removeAccessToken();
     removeRefreshToken();
     setUser(null);
-    setLoading(false);
     navigate("/login");
+    setLoading(false);
   };
 
+  // 🔹 Authentication Check
   const checkAuth = async () => {
-    try {
-      const token = getAccessToken();
-      if (token) {
-        await getProfile(); // Fetch profile if token exists
-      } else {
-        setLoading(false); // Stop loading if no token exists
-        navigate("/login"); // Navigate to login if no token
-      }
-    } catch (error) {
-      console.error("Authentication check failed:", error.message);
-      logout(); // Log out if there's an error
+    const token = getAccessToken();
+    if (token) {
+      await getProfile();
+    } else {
+      console.warn("Access token missing, trying refresh...");
+      await handleTokenRefresh();
     }
   };
 
   useEffect(() => {
-    checkAuth(); // Call checkAuth on mount
-  }, []); // Empty dependency array to only run on component mount
+    checkAuth();
+  }, []);
 
-  const value = { user, login, logout, loading };
+  // 🔹 Show Loading Spinner
+  if (loading)
+    return (
+      <div className="centered-spinner">
+        <div className="spinner"></div>
+      </div>
+    );
 
-  if (loading) return <div>Loading...</div>; // You can replace this with a loading spinner or any UI component
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };

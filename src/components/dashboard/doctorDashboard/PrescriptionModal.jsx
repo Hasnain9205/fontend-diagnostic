@@ -140,7 +140,7 @@ const PrescriptionModal = ({
         showModal ? "block" : "hidden"
       } fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50`}
     >
-      <div className="bg-white p-6 rounded-lg shadow-lg w-1/2 max-h-screen overflow-y-auto">
+      <div className="bg-white p-6 rounded-lg shadow-lg lg:w-1/2 max-h-screen overflow-y-auto">
         <h2 className="text-2xl font-semibold text-center mb-4 text-blue-600">
           Create Prescription
         </h2>

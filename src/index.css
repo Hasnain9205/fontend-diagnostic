@@ -121,3 +121,42 @@
     display: none;
   }
 }
+
+.menu-compact {
+  z-index: 50 !important; /* Higher than Swiper */
+  position: relative;
+}
+
+/* Add this CSS to your global styles (e.g., App.css or index.css) */
+
+.centered-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+  width: 100%; /* Full width */
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.7
+  ); /* Optional: To dim the background */
+}
+
+.spinner {
+  border: 5px solid #f3f3; /* Light grey */
+  border-top: 5px solid #3498db; /* Blue color */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

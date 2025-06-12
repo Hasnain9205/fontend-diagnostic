@@ -48,6 +48,8 @@ export default function TopDoctors() {
           <div
             key={index}
             className="card card-compact bg-base-100 w-80 sm:w-96 shadow-xl cursor-pointer flex-shrink-0 hover:translate-y-[-10px] transition-all duration-500"
+            data-aos="flip-left"
+            data-aos-duration="1000"
           >
             <figure>
               <img

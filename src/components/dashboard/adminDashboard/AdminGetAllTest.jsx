@@ -123,34 +123,37 @@ export default function AdminGetAllTest() {
       <table className="table-auto w-full border-collapse border border-gray-200">
         <thead>
           <tr className="bg-gray-100">
-            <th className="border px-4 py-2">#</th>
-            <th className="border px-4 py-2">Image</th>
-            <th className="border px-4 py-2">Name</th>
-            <th className="border px-4 py-2">Category</th>
-            <th className="border px-4 py-2">Price</th>
-            <th className="border px-4 py-2">Delete</th>
-            <th className="border px-4 py-2">Update</th>
+            <th className="border px-3 py-2 hidden sm:table-cell">#</th>
+            <th className="border  py-2">Image</th>
+            <th className="border  py-2">Name</th>
+            <th className="border px-3 py-2 hidden sm:table-cell">Category</th>
+            <th className="border  py-2">Price</th>
+            <th className="border py-2">Actions</th>
           </tr>
         </thead>
         <tbody>
           {tests.map((test, index) => (
             <tr key={test._id} className="hover:bg-gray-50">
-              <td className="border px-4 py-2 text-center">{index + 1}</td>
-              <td className="border px-4 py-2">
+              <td className="border px-3 py-2 hidden sm:table-cell">
+                {index + 1}
+              </td>
+              <td className="border py-2 flex items-center justify-center ">
                 {test.image ? (
                   <img
                     src={test.image}
                     alt="Doctor"
-                    className="h-16 w-16 rounded-full object-cover"
+                    className="h-10 w-10 lg:h-16 lg:w-16 rounded-full object-cover"
                   />
                 ) : (
                   "No Image"
                 )}
               </td>
-              <td className="border px-4 py-2">{test.name}</td>
-              <td className="border px-4 py-2">{test.category}</td>
-              <td className="border px-4 py-2">${test.price}</td>
-              <td className="border px-4 py-2 text-center">
+              <td className="border  py-2 text-center">{test.name}</td>
+              <td className="border px-3 py-2 text-center hidden sm:table-cell">
+                {test.category}
+              </td>
+              <td className="border text-center  py-2">${test.price}</td>
+              <td className="border py-2 text-center">
                 <button
                   className="text-red-500  px-3 py-1 rounded hover:text-red-800"
                   onClick={() => handleDelete(test._id)}
@@ -162,8 +165,7 @@ export default function AdminGetAllTest() {
                     <MdDelete className="text-2xl" />
                   )}
                 </button>
-              </td>
-              <td className="border px-4 py-2 text-center">
+
                 <button
                   className="text-blue-500  px-3 py-1 rounded hover:text-blue-800"
                   onClick={() => handleEdit(test)}

@@ -33,7 +33,8 @@ export default function Login() {
       const redirectPath =
         userRole === "admin" ||
         userRole === "doctor" ||
-        userRole === "diagnostic"
+        userRole === "diagnostic" ||
+        userRole === "employee"
           ? "/dashboard"
           : from;
 
@@ -56,13 +57,20 @@ export default function Login() {
   };
 
   return (
-    <div className="hero mt-32">
-      <div className="hero-content flex border-2 shadow-2xl">
-        <div>
-          <img className="w-[700px]" src={loginImg} alt="Login" />
+    <div className="flex justify-center lg:p-4 mt-10">
+      <div className="flex flex-col md:flex-row border-2 shadow-2xl rounded-lg p-6 max-w-4xl w-full">
+        {/* Image Section */}
+        <div className="w-full md:w-1/2 flex justify-center">
+          <img
+            className="w-full max-w-[350px] md:max-w-[400px] lg:max-w-[500px]"
+            src={loginImg}
+            alt="Login"
+          />
         </div>
-        <div className="card bg-base-100 w-full max-w-xl shadow-2xl">
-          <form onSubmit={handleLogin} className="card-body" disabled={loading}>
+
+        {/* Login Form */}
+        <div className="card bg-base-100 w-full md:w-1/2 max-w-sm lg:max-w-xl shadow-2xl p-3 lg:p-6">
+          <form onSubmit={handleLogin} className="">
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Email</span>
@@ -70,8 +78,8 @@ export default function Login() {
               <input
                 type="email"
                 name="email"
-                placeholder="email"
-                className="input input-bordered"
+                placeholder="Enter your email"
+                className="input input-bordered w-full"
                 required
                 disabled={loading}
               />
@@ -83,8 +91,8 @@ export default function Login() {
               <input
                 type="password"
                 name="password"
-                placeholder="password"
-                className="input input-bordered"
+                placeholder="Enter your password"
+                className="input input-bordered w-full"
                 required
                 disabled={loading}
               />

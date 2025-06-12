@@ -39,7 +39,7 @@ export default function Mri() {
       style={{ backgroundImage: `url(${waves})` }}
     >
       {/* Left Section */}
-      <div className="flex-1">
+      <div className="flex-1" data-aos="fade-right" data-aos-duration="1000">
         <h1 className="text-3xl md:text-4xl font-bold text-[#47ccc8]">
           The most modern <br />
           <span className="text-blue-950">MRI scanner testing</span>
@@ -66,7 +66,11 @@ export default function Mri() {
       </div>
 
       {/* Right Section (MRI Images) */}
-      <div className="flex-1 relative flex justify-center">
+      <div
+        className="flex-1 relative flex justify-center"
+        data-aos="fade-left"
+        data-aos-duration="1000"
+      >
         <img className="w-72 md:w-96 lg:w-full" src={mri} alt="MRI Scanner" />
         <img
           className="absolute top-0 right-0 w-20 md:w-28 lg:w-32"

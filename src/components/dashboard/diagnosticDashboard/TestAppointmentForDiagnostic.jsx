@@ -97,8 +97,8 @@ const TestAppointmentForDiagnostic = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 bg-white rounded-lg shadow-xl mt-6">
-      <h2 className="text-3xl font-semibold text-center text-gray-800 mb-8">
+    <div className="container mx-auto p-2 bg-white rounded-lg shadow-xl mt-6">
+      <h2 className="lg:text-3xl text-xl font-semibold text-center text-gray-800 mb-8">
         Test Appointments
       </h2>
 
@@ -111,31 +111,31 @@ const TestAppointmentForDiagnostic = () => {
           <table className="min-w-full bg-white border-separate border border-gray-200 rounded-lg">
             <thead className="bg-[#47ccc8] text-black">
               <tr>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-black">
+                <th className="px-2 py-3 text-left text-sm font-semibold text-black  hidden sm:table-cell">
                   Image
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-black">
+                <th className="px-2 py-3 text-left text-sm font-semibold text-black  hidden sm:table-cell">
                   Patient Name
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-black">
+                <th className="px-2 py-3 text-left text-sm font-semibold text-black  hidden sm:table-cell">
                   Phone
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-black">
+                <th className="px-2 py-3 text-left text-sm font-semibold text-black">
                   Test Name
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-black">
+                <th className="px-2 py-3 text-left text-sm font-semibold text-black  hidden sm:table-cell">
                   Test Category
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-black">
+                <th className="px-2 py-3 text-left text-sm font-semibold text-black">
                   Test Date
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-black">
+                <th className="px-2 py-3 text-left text-sm font-semibold text-black  hidden sm:table-cell">
                   Test Time
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-black">
+                <th className="px-2 py-3 text-left text-sm font-semibold text-black  hidden sm:table-cell">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-black">
+                <th className="px-2 py-3 text-left text-sm font-semibold text-black">
                   Action
                 </th>
               </tr>
@@ -143,7 +143,7 @@ const TestAppointmentForDiagnostic = () => {
             <tbody>
               {appointments?.map((appointment) => (
                 <tr key={appointment._id} className="border-b hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="px-2 py-4 text-sm text-gray-800  hidden sm:table-cell">
                     {appointment?.userId.profileImage ? (
                       <img
                         src={appointment?.userId.profileImage}
@@ -154,26 +154,26 @@ const TestAppointmentForDiagnostic = () => {
                       "No Image"
                     )}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="px-2 py-4 text-sm text-gray-800  hidden sm:table-cell">
                     {appointment?.userId.name}
                   </td>
 
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="px-2 py-4 text-sm text-gray-800  hidden sm:table-cell">
                     {appointment?.userId.phone}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="px-2 py-4 text-sm text-gray-800">
                     {appointment?.testId.name}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="px-2 py-4 text-sm text-gray-800  hidden sm:table-cell">
                     {appointment.testId.category}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="px-2 py-4 text-sm text-gray-800">
                     {appointment.appointmentDate}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="px-2 py-4 text-sm text-gray-800  hidden sm:table-cell">
                     {appointment.appointmentTime}
                   </td>
-                  <td className="px-6 py-4 text-sm">
+                  <td className="px-2 py-4 text-sm  hidden sm:table-cell">
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-semibold ${
                         appointment.status === "completed"
@@ -184,7 +184,7 @@ const TestAppointmentForDiagnostic = () => {
                       {appointment.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm">
+                  <td className="px-2 py-4 text-sm">
                     {(appointment.status === "pending" && (
                       <button
                         onClick={() => cancelAppointment(appointment._id)}

@@ -39,7 +39,7 @@ export default function AllTest() {
       <h1 className="flex flex-col justify-center items-center rounded-md text-3xl font-bold">
         All Test Services
       </h1>
-      <p className="text-center text-gray-700 mb-8 mt-2">
+      <p className="text-center text-gray-700 mx-6 mb-8 mt-2">
         Access a range of blood tests to ensure your health and well-being. Our
         team is dedicated to providing timely, accurate results.
       </p>
@@ -49,6 +49,8 @@ export default function AllTest() {
           <div
             key={test._id}
             className="card card-compact p-6 bg-base-100 w-96 shadow-xl cursor-pointer flex-shrink-0 hover:translate-y-[-10px] transition-all duration-500"
+            data-aos="flip-right"
+            data-aos-duration="1000"
           >
             <img
               className="w-full h-48 object-cover"
@@ -56,7 +58,7 @@ export default function AllTest() {
               alt="Test Image"
             />
             <h2 className="text-2xl font-bold mb-2 mt-4">{test.name}</h2>
-            <p className="text-gray-600 mb-4">{test.description}</p>
+            <p className="text-gray-600 h-20 mb-4">{test.description}</p>
             <div className="flex  items-center justify-between rounded-full pt-2 px-6 ">
               <p className="text-green-600 mb-2 font-bold">
                 Price: {test.price}
@@ -75,7 +77,7 @@ export default function AllTest() {
             </div>
             <button
               onClick={() => handleTestDetails(test._id)}
-              className=" bg-[#47ccc8]  hover:bg-blue-950 hover:text-white transition duration-200 font-semibold px-6 py-3 rounded-full flex items-center justify-center gap-2 mx-auto w-full"
+              className=" bg-[#47ccc8]  hover:bg-blue-950 hover:text-white transition duration-200 font-semibold px-6 py-2 rounded-md flex items-center justify-center gap-2 mx-auto w-full"
             >
               Test Details <FaArrowRight />
             </button>

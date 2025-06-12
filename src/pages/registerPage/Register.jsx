@@ -84,7 +84,7 @@ export default function Register() {
           <img src={loginImg} alt="register" className="w-full" />
         </div>
         <div className="w-full lg:w-1/2 p-6">
-          <h2 className="text-4xl font-semibold text-center text-[#47ccc8] mb-6">
+          <h2 className=" text-2xl lg:text-4xl font-bold  lg:font-semibold text-center text-[#47ccc8] mb-6">
             Create Your Account
           </h2>
           <form onSubmit={handleRegister}>

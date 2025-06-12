@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 
 const stripePromise = loadStripe(
   "pk_test_51QMhwQ2NL7DWMnAVCxYlUXf3YrRy2J4hE7o8sKGXpoNE1Yd0a9Rn3CzpKkXZNIhX3kQcjQaiv9vNrlWcEKuaMPWA005dxMLfCl"
-); // Replace with your Stripe publishable key
+);
 
 const Payment = () => {
   const location = useLocation();

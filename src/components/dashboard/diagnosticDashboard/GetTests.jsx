@@ -140,20 +140,21 @@ export default function GetTests() {
       <table className="table-auto w-full border-collapse border border-gray-200">
         <thead>
           <tr className="bg-gray-100">
-            <th className="border px-4 py-2">#</th>
-            <th className="border px-4 py-2">Image</th>
+            <th className="border px-4 py-2  hidden sm:table-cell">#</th>
+            <th className="border px-4 py-2  hidden sm:table-cell">Image</th>
             <th className="border px-4 py-2">Name</th>
-            <th className="border px-4 py-2">Category</th>
-            <th className="border px-4 py-2">Price</th>
-            <th className="border px-4 py-2">Delete</th>
-            <th className="border px-4 py-2">Update</th>
+            <th className="border px-4 py-2  hidden sm:table-cell">Category</th>
+            <th className="border px-4 py-2 ">Price</th>
+            <th className="border px-4 py-2">Actions</th>
           </tr>
         </thead>
         <tbody>
           {tests.map((test, index) => (
             <tr key={test._id} className="hover:bg-gray-50">
-              <td className="border px-4 py-2 text-center">{index + 1}</td>
-              <td className="border px-4 py-2">
+              <td className="border px-4 py-2 text-center  hidden sm:table-cell">
+                {index + 1}
+              </td>
+              <td className="border px-4 py-2  hidden sm:table-cell">
                 {test.image ? (
                   <img
                     src={test.image}
@@ -165,7 +166,9 @@ export default function GetTests() {
                 )}
               </td>
               <td className="border px-4 py-2">{test.name}</td>
-              <td className="border px-4 py-2">{test.category}</td>
+              <td className="border px-4 py-2  hidden sm:table-cell">
+                {test.category}
+              </td>
               <td className="border px-4 py-2">${test.price}</td>
               <td className="border px-4 py-2 text-center">
                 <button
@@ -179,8 +182,7 @@ export default function GetTests() {
                     <MdDelete className="text-2xl" />
                   )}
                 </button>
-              </td>
-              <td className="border px-4 py-2 text-center">
+
                 <button
                   className="text-blue-500  px-3 py-1 rounded hover:text-blue-800"
                   onClick={() => handleEdit(test)}
@@ -195,7 +197,7 @@ export default function GetTests() {
 
       {isEditing && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full mx-8">
             <h3 className="text-xl font-bold mb-4">Update Test</h3>
             <form onSubmit={handleUpdate}>
               <div className="mb-4">

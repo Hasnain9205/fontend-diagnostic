@@ -39,9 +39,11 @@ const AllPatients = () => {
   }, []);
 
   return (
-    <div className="px-6">
-      <h2 className="text-4xl font-bold text-center my-6">Total Patients</h2>
-      <h1 className="text-blue-700 font-bold text-xl">
+    <div className="lg:px-6">
+      <h2 className="lg:text-4xl text-xl font-bold lg:text-center my-6">
+        Total Patients
+      </h2>
+      <h1 className="text-blue-700 font-bold lg:text-xl">
         Total Patients: {patients.length}
       </h1>
       {loading ? (
@@ -55,25 +57,25 @@ const AllPatients = () => {
           <table className="w-full border-collapse bg-white shadow-lg rounded-lg overflow-hidden">
             <thead className="bg-[#47ccc8]">
               <tr>
-                <th className="py-3 px-6 text-left text-sm font-semibold">
+                <th className="py-3 px-2 text-left text-sm font-semibold hidden sm:table-cell">
                   Image
                 </th>
-                <th className="py-3 px-6 text-left text-sm font-semibold">
+                <th className="py-3 px-2 text-left text-sm font-semibold">
                   Name
                 </th>
-                <th className="py-3 px-6 text-left text-sm font-semibold">
+                <th className="py-3 px-2 text-left text-sm font-semibold hidden sm:table-cell">
                   Email
                 </th>
-                <th className="py-3 px-6 text-left text-sm font-semibold">
+                <th className="py-3 px-2 text-left text-sm font-semibold">
                   Phone
                 </th>
-                <th className="py-3 px-6 text-left text-sm font-semibold">
+                <th className="py-3 px-2 text-left text-sm font-semibold hidden sm:table-cell">
                   Gender
                 </th>
-                <th className="py-3 px-6 text-left text-sm font-semibold">
+                <th className="py-3 px-2 text-left text-sm font-semibold hidden sm:table-cell">
                   Date of birth
                 </th>
-                <th className="py-3 px-6 text-left text-sm font-semibold">
+                <th className="py-3 px-2 text-left text-sm font-semibold hidden sm:table-cell">
                   Address
                 </th>
               </tr>
@@ -86,7 +88,7 @@ const AllPatients = () => {
                     index % 2 === 0 ? "bg-gray-100" : "bg-white"
                   } hover:bg-blue-100`}
                 >
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="px-2 py-4 text-sm text-gray-800 hidden sm:table-cell">
                     {patient?.profileImage ? (
                       <img
                         src={patient.profileImage}
@@ -97,22 +99,22 @@ const AllPatients = () => {
                       "N/A"
                     )}
                   </td>
-                  <td className="py-4 px-6 text-gray-700">
+                  <td className="py-4 px-2 text-gray-700">
                     {patient.name || "N/A"}
                   </td>
-                  <td className="py-4 px-6 text-gray-700">
+                  <td className="py-4 px-2 text-gray-700 hidden sm:table-cell">
                     {patient.email || "N/A"}
                   </td>
-                  <td className="py-4 px-6 text-gray-700">
+                  <td className="py-4 px-2 text-gray-700">
                     {patient.phone || "N/A"}
                   </td>
-                  <td className="py-4 px-6 text-gray-700">
+                  <td className="py-4 px-2 text-gray-700 hidden sm:table-cell">
                     {patient.gender || "N/A"}
                   </td>
-                  <td className="py-4 px-6 text-gray-700">
+                  <td className="py-4 px-2 text-gray-700 hidden sm:table-cell">
                     {patient.dob || "N/A"}
                   </td>
-                  <td className="py-4 px-6 text-gray-700">
+                  <td className="py-4 px-2 text-gray-700 hidden sm:table-cell">
                     {patient.address || "N/A"}
                   </td>
                 </tr>

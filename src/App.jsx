@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/navbar/Navbar";
 import Footer from "./pages/Footer/Footer";
@@ -60,14 +60,27 @@ import GetDoctor from "./components/dashboard/diagnosticDashboard/GetDoctor";
 import TestAppointmentForDiagnostic from "./components/dashboard/diagnosticDashboard/TestAppointmentForDiagnostic";
 import MyPrescriptions from "./components/Prescriptions/MyPrescriptions";
 import PrescriptionDetail from "./components/Prescriptions/PrescriptionDetail";
+import Aos from "aos";
+import "aos/dist/aos.css";
+import CreateEmployee from "./components/dashboard/diagnosticDashboard/CreateEmployee";
+import EmployeeDashboard from "./components/dashboard/employeeDashboard/EmployeeDashboard";
+import AllTest from "./components/Test/AllTest";
+import OurEmployees from "./pages/homePage/OurEmployees";
+import SalarySheet from "./components/dashboard/diagnosticDashboard/SalarySheet";
+import AddLeave from "./components/dashboard/employeeDashboard/AddLeave";
+import LeaveList from "./components/dashboard/employeeDashboard/LeaveList";
+import EmployeeLeaves from "./components/dashboard/diagnosticDashboard/EmployeeLeaves";
 
 const App = () => {
+  useEffect(() => {
+    Aos.init();
+  }, []);
   return (
     <div>
-      <div className="mx-44">
+      <div className=" h-20">
         <Navbar />
       </div>
-      <div className="mx-20 sm:mx-[10%]">
+      <div className="lg:mx-40 px-4">
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
@@ -98,6 +111,9 @@ const App = () => {
           <Route path="/invoice" element={<InvoiceList />} />
           <Route path="/diagnostic" element={<Diagnostics />} />
           <Route path="/diagnostic/:id" element={<DiagnosticDetails />} />
+          <Route path="/tests" element={<AllTest />} />
+          <Route path="/employees" element={<OurEmployees />} />
+
           <Route
             path="/diagnostic/:centerId/doctors"
             element={<DoctorSpecificList />}
@@ -159,8 +175,16 @@ const App = () => {
               element={<TestAppointmentForDiagnostic />}
             />
           </Route>
+          <Route path="createEmployee" element={<CreateEmployee />} />
+          <Route path="employeeLeaves" element={<EmployeeLeaves />} />
+          <Route path="salarySheet" element={<SalarySheet />} />
+          {/* Employees Dashboard */}
+          <Route path="employeeDashboard" element={<EmployeeDashboard />} />
+          <Route path="addLeave" element={<AddLeave />} />
+          <Route path="leaveList" element={<LeaveList />} />
         </Routes>
       </div>
+
       <Footer />
     </div>
   );

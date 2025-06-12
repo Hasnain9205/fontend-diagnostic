@@ -7,6 +7,7 @@ import Mri from "../../components/mri/Mri";
 import TopDoctors from "../../components/topDoctors/TopDoctors";
 import Faq from "../FAQ/Faq";
 import Skills from "../Skills/Skills";
+import OurEmployees from "./OurEmployees";
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
       <Skills />
       <TopDoctors />
       <Mri />
+      <OurEmployees />
       <Faq />
     </div>
   );

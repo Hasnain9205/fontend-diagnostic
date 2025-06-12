@@ -10,7 +10,10 @@ export default function AllDoctor() {
   const [isEditing, setIsEditing] = useState(false);
   const [currentDoctor, setCurrentDoctor] = useState(null);
 
-  // Fetch all doctors
+  useEffect(() => {
+    fetchDoctors();
+  }, []);
+
   const fetchDoctors = async () => {
     try {
       const token = getAccessToken();
@@ -19,18 +22,12 @@ export default function AllDoctor() {
       });
       setDoctors(response.data.doctors || []);
     } catch (error) {
-      console.error("Error fetching doctors:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Failed to load doctor data.",
-      });
+      Swal.fire("Error", "Failed to load doctor data.", "error");
     } finally {
       setLoading(false);
     }
   };
 
-  // Delete doctor
   const handleDelete = async (doctorId) => {
     Swal.fire({
       title: "Are you sure?",
@@ -52,145 +49,69 @@ export default function AllDoctor() {
           );
           Swal.fire("Deleted!", "The doctor has been deleted.", "success");
         } catch (error) {
-          console.error("Error deleting doctor:", error);
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "Failed to delete the doctor.",
-          });
+          Swal.fire("Error", "Failed to delete the doctor.", "error");
         }
       }
     });
   };
 
-  // Enable edit mode
   const handleEdit = (doctor) => {
     setCurrentDoctor({ ...doctor, slotDate: "", slotTime: "" });
     setIsEditing(true);
   };
 
-  const handleUpdate = async (e) => {
-    e.preventDefault();
-    try {
-      const {
-        name,
-        email,
-        speciality,
-        degree,
-        experience,
-        about,
-        fees,
-        address,
-        slotDate,
-        slotTime,
-      } = currentDoctor;
-
-      const existingDoctor = doctors.find(
-        (doc) => doc._id === currentDoctor._id
-      );
-      const updatedSlots = [
-        ...(existingDoctor.slots_booked || []),
-        { slotDate, slotTime },
-      ];
-
-      const updatedDoctor = {
-        name,
-        email,
-        speciality,
-        degree,
-        experience,
-        about,
-        fees,
-        address,
-        slots: updatedSlots,
-      };
-
-      const token = getAccessToken();
-      const response = await axiosInstance.put(
-        `/admin/update-doctor/${currentDoctor._id}`,
-        updatedDoctor,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      setDoctors((prevDoctors) =>
-        prevDoctors.map((doctor) =>
-          doctor._id === currentDoctor._id ? response.data.doctor : doctor
-        )
-      );
-
-      Swal.fire("Updated!", "The doctor has been updated.", "success");
-      setIsEditing(false);
-    } catch (error) {
-      console.error("Error updating doctor:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Failed to update the doctor.",
-      });
-    }
-  };
-
-  useEffect(() => {
-    fetchDoctors();
-  }, []);
-
   if (loading) {
-    return <div className="text-center">Loading...</div>;
-  }
-
-  if (!Array.isArray(doctors) || doctors.length === 0) {
-    return (
-      <div className="text-center text-gray-500">No doctors available.</div>
-    );
+    return <div className="text-center text-lg">Loading...</div>;
   }
 
   return (
-    <div>
-      <div className="container mx-auto mt-10">
-        <h2 className="text-2xl font-bold text-center mb-4">All Doctors</h2>
-        <table className="table-auto w-full border-collapse border border-gray-200">
+    <div className="container mx-auto mt-5 px-2">
+      <h2 className="text-2xl font-bold text-center mb-4">All Doctors</h2>
+      <div className="overflow-x-auto">
+        <table className="w-full border border-gray-300 text-sm sm:text-base">
           <thead>
             <tr className="bg-gray-100">
-              <th className="border px-4 py-2">#</th>
-              <th className="border px-4 py-2">Image</th>
-              <th className="border px-4 py-2">Name</th>
-              <th className="border px-4 py-2">Speciality</th>
-              <th className="border px-4 py-2">Email</th>
-              <th className="border px-4 py-2">Delete</th>
-              <th className="border px-4 py-2">Update</th>
+              <th className="border px-3 py-2">#</th>
+              <th className="border px-3 py-2">Image</th>
+              <th className="border px-3 py-2">Name</th>
+              <th className="border px-3 py-2 hidden sm:table-cell">
+                Speciality
+              </th>
+              <th className="border px-3 py-2 hidden sm:table-cell">Email</th>
+              <th className="border px-3 py-2">Actions</th>
             </tr>
           </thead>
           <tbody>
             {doctors.map((doctor, index) => (
-              <tr key={doctor._id} className="hover:bg-gray-50">
-                <td className="border px-4 py-2 text-center">{index + 1}</td>
-                <td className="border px-4 py-2">
+              <tr key={doctor._id} className="hover:bg-gray-50 text-center">
+                <td className="border px-3 py-2">{index + 1}</td>
+                <td className="border px-3 py-2">
                   {doctor.profileImage ? (
                     <img
                       src={doctor.profileImage}
                       alt="Doctor"
-                      className="h-16 w-16 rounded-full object-cover"
+                      className="h-12 w-12 sm:h-16 sm:w-16 rounded-full object-cover"
                     />
                   ) : (
                     "No Image"
                   )}
                 </td>
-                <td className="border px-4 py-2">{doctor.name}</td>
-                <td className="border px-4 py-2">{doctor.speciality}</td>
-                <td className="border px-4 py-2">{doctor.email}</td>
-                <td className="border px-4 py-2 text-center">
+                <td className="border px-3 py-2">{doctor.name}</td>
+                <td className="border px-3 py-2 hidden sm:table-cell">
+                  {doctor.speciality}
+                </td>
+                <td className="border px-3 py-2 hidden sm:table-cell">
+                  {doctor.email}
+                </td>
+                <td className="border px-3 py-2">
                   <button
-                    className="text-black text-2xl hover:text-red-500"
+                    className="text-red-500 hover:text-red-700 text-xl mx-1"
                     onClick={() => handleDelete(doctor._id)}
                   >
                     <MdDelete />
                   </button>
-                </td>
-                <td className="border px-4 py-2 text-center">
                   <button
-                    className="hover:text-green-500 text-2xl"
+                    className="text-green-500 hover:text-green-700 text-xl mx-1"
                     onClick={() => handleEdit(doctor)}
                   >
                     <MdSystemUpdateAlt />
@@ -200,68 +121,53 @@ export default function AllDoctor() {
             ))}
           </tbody>
         </table>
+      </div>
 
-        {isEditing && (
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
-              <h3 className="text-xl font-bold mb-4">Update Doctor</h3>
-              <form onSubmit={handleUpdate}>
-                {[
-                  "name",
-                  "speciality",
-                  "email",
-                  "degree",
-                  "experience",
-                  "about",
-                  "fees",
-                  "address",
-                  "slotDate",
-                  "slotTime",
-                ].map((field, index) => (
-                  <div className="mb-4" key={index}>
+      {isEditing && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-5 rounded-lg shadow-lg w-11/12 sm:w-2/3 md:w-1/2 lg:w-1/3">
+            <h3 className="text-xl font-bold mb-4">Update Doctor</h3>
+            <form>
+              {["name", "speciality", "email", "degree", "experience"].map(
+                (field) => (
+                  <div className="mb-3" key={field}>
                     <label className="block text-sm font-medium">
                       {field.charAt(0).toUpperCase() + field.slice(1)}
                     </label>
                     <input
-                      type={
-                        field.includes("Date")
-                          ? "date"
-                          : field.includes("Time")
-                          ? "time"
-                          : "text"
-                      }
+                      type="text"
                       value={currentDoctor[field] || ""}
+                      className="w-full px-3 py-2 border border-gray-300 rounded"
                       onChange={(e) =>
                         setCurrentDoctor({
                           ...currentDoctor,
                           [field]: e.target.value,
                         })
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded"
-                      required
                     />
                   </div>
-                ))}
-                <div className="flex justify-end">
-                  <button
-                    type="submit"
-                    className="btn px-12 py-2 mr-2 text-white bg-[#47ccc8] rounded-lg shadow-lg"
-                  >
-                    Save
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setIsEditing(false)}
-                    className="bg-gray-500 text-white px-4 py-2 rounded"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </div>
+                )
+              )}
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-green-500 text-white rounded mr-2"
+                  onClick={() => setIsEditing(false)}
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-gray-500 text-white rounded"
+                  onClick={() => setIsEditing(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

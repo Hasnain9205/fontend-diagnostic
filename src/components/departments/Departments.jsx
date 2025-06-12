@@ -15,7 +15,11 @@ export default function Departments() {
 
       <section className="mt-10 flex flex-col lg:flex-row items-center justify-center gap-10">
         {/* Left Section */}
-        <div className="text-center bg-[#47ccc8] w-full lg:w-[500px] rounded-md py-10 px-6 md:px-12">
+        <div
+          className="text-center bg-[#47ccc8] w-full lg:w-[500px] rounded-md py-10 px-6 md:px-12"
+          data-aos="fade-right"
+          data-aos-duration="1000"
+        >
           <h2 className="text-2xl md:text-3xl font-extrabold text-white text-start">
             World leader <br />
             <span className="text-blue-950">in diagnostics</span>
@@ -36,7 +40,11 @@ export default function Departments() {
         </div>
 
         {/* Right Section */}
-        <div className="bg-gray-200 p-6 md:p-8 rounded-md w-full">
+        <div
+          className="bg-gray-200 p-6 md:p-8 rounded-md w-full"
+          data-aos="fade-left"
+          data-aos-duration="1000"
+        >
           <div className="flex flex-wrap justify-center">
             <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {departmentsData.map((department, index) => (

@@ -156,8 +156,8 @@ export default function AddDoctor() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-8 p-6 bg-white shadow-md rounded-lg dark:bg-gray-800">
-      <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-4">
+    <div className="lg:max-w-4xl  mx-auto mt-8 p-4 bg-white shadow-md rounded-lg dark:bg-gray-800">
+      <h2 className="lg:text-3xl text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">
         Add Doctor
       </h2>
       <form onSubmit={handleSubmit}>
@@ -174,7 +174,7 @@ export default function AddDoctor() {
             name="name"
             value={formData.name}
             onChange={handleInputChange}
-            className="mt-1 p-2 w-full border rounded-lg"
+            className="mt-1 p-2 lg:w-full border rounded-lg"
             required
           />
         </div>
@@ -192,7 +192,7 @@ export default function AddDoctor() {
             name="email"
             value={formData.email}
             onChange={handleInputChange}
-            className="mt-1 p-2 w-full border rounded-lg"
+            className="mt-1 p-2 lg:w-full border rounded-lg"
             required
           />
         </div>
@@ -210,7 +210,7 @@ export default function AddDoctor() {
             name="password"
             value={formData.password}
             onChange={handleInputChange}
-            className="mt-1 p-2 w-full border rounded-lg"
+            className="mt-1 p-2 lg:w-full border rounded-lg"
             required
           />
         </div>
@@ -228,12 +228,12 @@ export default function AddDoctor() {
             name="profileImage"
             accept="profileImage/*"
             onChange={handleImageUpload}
-            className="mt-1 p-2 w-full border rounded-lg"
+            className="mt-1 p-2 lg:w-full w-[220px] border rounded-lg"
           />
           {loading && <p className="text-gray-500 mt-2">Uploading image...</p>}
         </div>
 
-        <div className="flex gap-10">
+        <div className="lg:flex gap-10">
           <div className="mb-4 flex-1">
             <label
               htmlFor="speciality"
@@ -247,7 +247,7 @@ export default function AddDoctor() {
               name="speciality"
               value={formData.speciality}
               onChange={handleInputChange}
-              className="mt-1 p-2 w-full border rounded-lg"
+              className="mt-1 p-2 lg:w-full border rounded-lg"
               required
             />
           </div>
@@ -265,13 +265,13 @@ export default function AddDoctor() {
               name="degree"
               value={formData.degree}
               onChange={handleInputChange}
-              className="mt-1 p-2 w-full border rounded-lg"
+              className="mt-1 p-2 lg:w-full border rounded-lg"
               required
             />
           </div>
         </div>
 
-        <div className="flex gap-10">
+        <div className="lg:flex gap-10">
           <div className="mb-4 flex-1">
             <label
               htmlFor="experience"
@@ -285,7 +285,7 @@ export default function AddDoctor() {
               name="experience"
               value={formData.experience}
               onChange={handleInputChange}
-              className="mt-1 p-2 w-full border rounded-lg"
+              className="mt-1 p-2 lg:w-full border rounded-lg"
               required
             />
           </div>
@@ -303,13 +303,13 @@ export default function AddDoctor() {
               name="fees"
               value={formData.fees}
               onChange={handleInputChange}
-              className="mt-1 p-2 w-full border rounded-lg"
+              className="mt-1 p-2 lg:w-full border rounded-lg"
               required
             />
           </div>
         </div>
 
-        <div className="flex gap-10">
+        <div className="lg:flex gap-10">
           <div className="mb-4 flex-1">
             <label
               htmlFor="experience"
@@ -323,7 +323,7 @@ export default function AddDoctor() {
               name="district"
               value={formData.district}
               onChange={handleInputChange}
-              className="mt-1 p-2 w-full border rounded-lg"
+              className="mt-1 p-2 lg:w-full border rounded-lg"
               required
             />
           </div>
@@ -341,12 +341,12 @@ export default function AddDoctor() {
               name="upazila"
               value={formData.upazila}
               onChange={handleInputChange}
-              className="mt-1 p-2 w-full border rounded-lg"
+              className="mt-1 p-2 lg:w-full border rounded-lg"
               required
             />
           </div>
         </div>
-        <div className="flex gap-10">
+        <div className="lg:flex gap-10">
           <div className="mb-4 flex-1">
             <label
               htmlFor="address"
@@ -360,7 +360,7 @@ export default function AddDoctor() {
               name="address"
               value={formData.address}
               onChange={handleInputChange}
-              className="mt-1 p-2 w-full border rounded-lg"
+              className="mt-1 p-2 lg:w-full border rounded-lg"
               required
             />
           </div>
@@ -377,25 +377,39 @@ export default function AddDoctor() {
               name="chamber"
               value={formData.chamber}
               onChange={handleInputChange}
-              className="mt-1 p-2 w-full border rounded-lg"
+              className="mt-1 p-2 lg:w-full border rounded-lg"
               required
             />
           </div>
         </div>
 
         <h3>Available Slots</h3>
-        <div className="mb-4 gap-4 flex">
+        <div className="mb-4 gap-4 lg:flex">
+          <label
+            htmlFor="address"
+            className="block text-gray-700 dark:text-gray-300"
+          >
+            Date :
+          </label>
           <input
             type="date"
             name="slotDate"
             value={slot.slotDate}
             onChange={handleSlotChange}
+            className="border p-1 rounded-md"
           />
+          <label
+            htmlFor="address"
+            className="block text-gray-700 dark:text-gray-300"
+          >
+            Time :
+          </label>
           <input
             type="time"
             name="slotTime"
             value={slot.slotTime}
             onChange={handleSlotChange}
+            className="border p-1 rounded-md"
           />
           <button type="button" onClick={handleAddSlot}>
             Add Slot
@@ -411,7 +425,7 @@ export default function AddDoctor() {
 
         <button
           type="submit"
-          className="btn btn-square w-full p-4 hover:text-white bg-[#47ccc8] rounded-lg shadow-lg flex items-center justify-center hover:bg-blue-950"
+          className="btn btn-square lg:w-full w-[220px] p-4 hover:text-white bg-[#47ccc8] rounded-lg shadow-lg flex items-center justify-center hover:bg-blue-950"
           disabled={loading}
         >
           {loading ? (

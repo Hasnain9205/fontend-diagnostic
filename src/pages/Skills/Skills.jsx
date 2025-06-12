@@ -6,7 +6,11 @@ export default function Skills() {
     <div>
       {/* About Clinic Section */}
       <div className="flex flex-col lg:flex-row items-center justify-around gap-10 lg:gap-20 mt-20 px-4">
-        <div className="text-left">
+        <div
+          className="text-left"
+          data-aos="fade-right"
+          data-aos-duration="1000"
+        >
           <h5 className="text-xl font-medium text-[#47ccc8]">About clinic</h5>
           <h1 className="text-3xl lg:text-4xl font-extrabold mt-2">
             Why patients choose our center
@@ -25,7 +29,11 @@ export default function Skills() {
         </div>
 
         {/* Clinic Skills Section */}
-        <div className="text-left mt-12 lg:mt-0">
+        <div
+          className="text-left  lg:mt-0"
+          data-aos="fade-left"
+          data-aos-duration="1000"
+        >
           <h5 className="text-xl font-medium text-[#47ccc8]">Clinic skills</h5>
           <h1 className="text-3xl lg:text-4xl font-extrabold mt-2">
             Our specialisations
@@ -69,12 +77,20 @@ export default function Skills() {
       </div>
 
       {/* Doctor Image Section */}
-      <div className="flex justify-center items-center mt-16">
+      <div
+        className="flex justify-center items-center mt-4"
+        data-aos="zoom-in"
+        data-aos-duration="1000"
+      >
         <img src={drImg} alt="Doctor" className="max-w-full h-auto" />
       </div>
 
       {/* Statistics Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mt-16 px-4">
+      <div
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 px-4"
+        data-aos="fade-right"
+        data-aos-duration="1000"
+      >
         <div className="p-8 border-r-2 border-dashed text-center">
           <h1 className="text-4xl text-[#47ccc8] font-extrabold mb-2">86</h1>
           <p>Qualified doctors</p>

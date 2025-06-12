@@ -67,29 +67,29 @@ const TestAppointment = () => {
           <table className="min-w-full bg-white border-separate border border-gray-200 rounded-lg">
             <thead className="bg-[#47ccc8] text-black">
               <tr>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-black">
+                <th className="border px-3 py-2 hidden sm:table-cell text-left text-sm font-semibold text-black">
                   Image
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-black">
+                <th className="border px-3 py-2 hidden sm:table-cell text-left text-sm font-semibold text-black">
                   Patient Name
                 </th>
 
-                <th className="px-6 py-3 text-left text-sm font-semibold text-black">
+                <th className="border px-3 py-2 hidden sm:table-cell text-left text-sm font-semibold text-black">
                   Phone
                 </th>
                 <th className="px-6 py-3 text-left text-sm font-semibold text-black">
                   Test Name
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-black">
+                <th className="border px-3 py-2 hidden sm:table-cell text-left text-sm font-semibold text-black">
                   Test Category
                 </th>
                 <th className="px-6 py-3 text-left text-sm font-semibold text-black">
                   Test Date
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-black">
+                <th className="border px-3 py-2 hidden sm:table-cell text-left text-sm font-semibold text-black">
                   Test Time
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-black">
+                <th className="border px-3 py-2 hidden sm:table-cell text-left text-sm font-semibold text-black">
                   Status
                 </th>
                 <th className="px-6 py-3 text-left text-sm font-semibold text-black">
@@ -100,7 +100,7 @@ const TestAppointment = () => {
             <tbody>
               {appointments?.map((appointment) => (
                 <tr key={appointment._id} className="border-b hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="border px-3 py-2 hidden sm:table-cell text-sm text-gray-800">
                     {appointment?.userId.profileImage ? (
                       <img
                         src={appointment?.userId.profileImage}
@@ -111,26 +111,26 @@ const TestAppointment = () => {
                       "No Image"
                     )}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="border px-3 py-2 hidden sm:table-cell text-sm text-gray-800">
                     {appointment?.userId.name}
                   </td>
 
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="border px-3 py-2 hidden sm:table-cell text-sm text-gray-800">
                     {appointment?.userId.phone}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="border px-3 py-2 text-sm text-gray-800">
                     {appointment?.testId.name}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="border px-3 py-2 hidden sm:table-cell text-sm text-gray-800">
                     {appointment.testId.category}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="border px-3 py-2 text-sm text-gray-800">
                     {appointment.appointmentDate}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="border px-3 py-2 hidden sm:table-cell text-sm text-gray-800">
                     {appointment.appointmentTime}
                   </td>
-                  <td className="px-6 py-4 text-sm">
+                  <td className="border px-3 py-2 hidden sm:table-cell text-sm text-gray-800">
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-semibold ${
                         appointment.status === "completed"
@@ -141,7 +141,7 @@ const TestAppointment = () => {
                       {appointment.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm">
+                  <td className="border px-3 py-2 text-sm text-gray-800">
                     {appointment.status === "pending" && (
                       <button
                         onClick={() => cancelAppointment(appointment._id)}

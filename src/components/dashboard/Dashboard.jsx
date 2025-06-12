@@ -14,7 +14,7 @@ import AllPatients from "./doctorDashboard/AllPatients";
 import { GiTestTubes } from "react-icons/gi";
 import { BiSolidDashboard } from "react-icons/bi";
 import { LuTestTubes } from "react-icons/lu";
-import { FaNoteSticky } from "react-icons/fa6";
+import { FaBars, FaNoteSticky } from "react-icons/fa6";
 import { BsFileEarmarkTextFill } from "react-icons/bs";
 import { ImUsers } from "react-icons/im";
 import { LuGitPullRequestCreate } from "react-icons/lu";
@@ -36,6 +36,14 @@ import GetTests from "./diagnosticDashboard/GetTests";
 import AddDoctor from "./diagnosticDashboard/AddDoctor";
 import GetDoctor from "./diagnosticDashboard/GetDoctor";
 import TestAppointmentForDiagnostic from "./diagnosticDashboard/TestAppointmentForDiagnostic";
+import CreateEmployee from "./diagnosticDashboard/CreateEmployee";
+import EmployeeDashboard from "./employeeDashboard/EmployeeDashboard";
+import AllEmployee from "./diagnosticDashboard/AllEmployee";
+import { GrUserWorker } from "react-icons/gr";
+import SalarySheet from "./diagnosticDashboard/SalarySheet";
+import AddLeave from "./employeeDashboard/AddLeave";
+import LeaveList from "./employeeDashboard/LeaveList";
+import EmployeeLeaves from "./diagnosticDashboard/EmployeeLeaves";
 
 const rolePages = {
   admin: {
@@ -106,6 +114,27 @@ const rolePages = {
       icon: <BiSolidDashboard />,
       label: "Diagnostic Dashboard",
     },
+    employee: {
+      component: <CreateEmployee />,
+      icon: <BsFileEarmarkTextFill />,
+      label: "Add Employee",
+    },
+
+    AllEmployee: {
+      component: <AllEmployee />,
+      icon: <GrUserWorker />,
+      label: "All Employee",
+    },
+    employeeLeaves: {
+      component: <EmployeeLeaves />,
+      icon: <GrUserWorker />,
+      label: "Employees leave",
+    },
+    SalarySheet: {
+      component: <SalarySheet />,
+      icon: <GrUserWorker />,
+      label: "Salary Sheet",
+    },
     addTest: {
       component: <AddTest />,
       icon: <BiTestTube />,
@@ -137,12 +166,30 @@ const rolePages = {
       label: "Doctor Appointments",
     },
   },
+  employee: {
+    employeeDashboard: {
+      component: <EmployeeDashboard />,
+      icon: <FaHome />,
+      label: "Employee Dashboard",
+    },
+    addLeave: {
+      component: <AddLeave />,
+      icon: <FaHome />,
+      label: "Add Leave",
+    },
+    leaveList: {
+      component: <LeaveList />,
+      icon: <FaHome />,
+      label: "Leave List",
+    },
+  },
 };
 
 export default function Dashboard() {
   const { user, loading } = useContext(AuthContext);
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState("");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (!loading && user) {
@@ -152,6 +199,8 @@ export default function Dashboard() {
         setCurrentPage("doctorDashboard");
       } else if (user.role === "diagnostic") {
         setCurrentPage("diagnosticDashboard");
+      } else if (user.role === "employee") {
+        setCurrentPage("employeeDashboard");
       } else {
         navigate("/login");
       }
@@ -188,35 +237,30 @@ export default function Dashboard() {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <aside className="w-64 bg-white shadow-md dark:bg-gray-800">
-        <div className="flex flex-col items-center p-6">
-          <img
-            className="w-24 h-24 rounded-full shadow-md"
-            src={user?.profileImage || "/default-profile.png"}
-            alt={user?.name || "User Profile"}
-          />
-          <h2 className="mt-4 text-lg font-semibold text-gray-800 dark:text-gray-200">
-            {user?.name}
-          </h2>
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            {user?.email}
-          </p>
-        </div>
-        <nav className="mt-6">
-          {Object.entries(rolePages[user.role]).map(
-            ([page, { icon, label }]) => (
+      {/* Sidebar */}
+      <aside
+        className={`bg-white shadow-md transition-all duration-300 ${
+          isSidebarOpen ? "w-64" : "w-16"
+        }`}
+      >
+        <button
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className="p-2 text-gray-700 hover:bg-gray-200 w-full flex justify-center"
+        >
+          <FaBars size={20} />
+        </button>
+        <nav className="mt-10">
+          {Object.entries(rolePages[user.role] || {}).map(
+            ([key, { icon, label }]) => (
               <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className={`flex items-center px-6 py-2 mt-2 text-gray-700 transition-transform duration-200  hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700 w-full ${
-                  currentPage === page
-                    ? "bg-teal-500 text-white w-full"
-                    : "bg-transparent"
+                key={key}
+                onClick={() => setCurrentPage(key)}
+                className={`flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200 w-full ${
+                  currentPage === key ? "bg-teal-500 text-white" : ""
                 }`}
-                aria-label={`Navigate to ${label}`}
               >
-                {icon}
-                <span className="ml-4 font-medium">{label}</span>
+                <span className="text-lg">{icon}</span>
+                {isSidebarOpen && <span className="ml-4">{label}</span>}
               </button>
             )
           )}

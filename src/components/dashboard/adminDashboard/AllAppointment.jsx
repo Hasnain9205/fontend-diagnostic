@@ -63,8 +63,8 @@ const AllAppointment = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      <h2 className="text-4xl font-semibold text-gray-800 text-center mb-8">
+    <div className="max-w-7xl mx-auto ">
+      <h2 className="lg:text-4xl font-semibold text-gray-800 text-center mb-8">
         Doctor Appointments
       </h2>
 
@@ -81,28 +81,28 @@ const AllAppointment = () => {
           <table className="min-w-full table-auto">
             <thead className="bg-[#47ccc8] text-black">
               <tr>
-                <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
+                <th className="px-2 py-4 text-left text-sm font-medium text-gray-600  hidden sm:table-cell">
                   Image
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
+                <th className="px-2 py-4 text-left text-sm font-medium text-gray-600 hidden sm:table-cell">
                   Patient
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
+                <th className="px-2 py-4 text-left text-sm font-medium text-gray-600  hidden sm:table-cell">
                   Phone
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
+                <th className="px-2 py-4 text-left text-sm font-medium text-gray-600">
                   Doctor
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
+                <th className="px-2 py-4 text-left text-sm font-medium text-gray-600">
                   Slot Date
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
+                <th className="px-2 py-4 text-left text-sm font-medium text-gray-600  hidden sm:table-cell">
                   Slot Time
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
+                <th className="px-2 py-4 text-left text-sm font-medium text-gray-600  hidden sm:table-cell">
                   Status
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
+                <th className="px-2 py-4 text-left text-sm font-medium text-gray-600">
                   Action
                 </th>
               </tr>
@@ -110,29 +110,29 @@ const AllAppointment = () => {
             <tbody>
               {appointments?.map((appointment) => (
                 <tr key={appointment._id} className="border-b hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="px-2 py-4 text-sm text-gray-800  hidden sm:table-cell">
                     <img
                       src={appointment?.userId.profileImage || "/default.jpg"}
                       alt="Patient"
                       className="h-16 w-16 rounded-full object-cover"
                     />
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="px-2 py-4 text-sm text-gray-800 hidden sm:table-cell">
                     {appointment.userId.name}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="px-2 py-4 text-sm text-gray-800  hidden sm:table-cell">
                     {appointment.userId.phone}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="px-2 py-4 text-sm text-gray-800">
                     {appointment.docData.name}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="px-2 py-4 text-sm text-gray-800">
                     {new Date(appointment.slotDate).toLocaleDateString()}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-800">
+                  <td className="px-2 py-4 text-sm text-gray-800  hidden sm:table-cell">
                     {appointment.slotTime}
                   </td>
-                  <td className="px-6 py-4 text-sm">
+                  <td className="px-2 py-4 text-sm  hidden sm:table-cell">
                     <span
                       className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusClass(
                         appointment.status
@@ -141,11 +141,11 @@ const AllAppointment = () => {
                       {appointment.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm">
+                  <td className="px-2 py-4 text-sm">
                     {appointment.status === "pending" && (
                       <button
                         onClick={() => cancelAppointment(appointment._id)}
-                        className="px-4 py-2 text-white bg-red-500 rounded-md hover:bg-red-700 transition-colors"
+                        className="px-2 py-2 text-white bg-red-500 rounded-md hover:bg-red-700 font-bold transition-colors"
                       >
                         Cancel
                       </button>

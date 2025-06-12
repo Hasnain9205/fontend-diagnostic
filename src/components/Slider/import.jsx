@@ -1,6 +1,6 @@
 import doctor from "../../../src/assets/doctor3.jpg";
-import ctScan from "../../../src/assets/ctScan.webp";
-import xray from "../../../src/assets/xray.jpg";
+import diagnostic from "../../../src/assets/diagnostic.jpg";
+import employees from "../../../src/assets/employees.jpg";
 import patho from "../../../src/assets/patho.jpg";
 
 const slides = [
@@ -15,22 +15,23 @@ const slides = [
   },
   {
     id: "item2",
-    image: ctScan,
-    title: "Advanced CT Scan Services",
+    image: diagnostic,
+    title: "Advanced & Reliable Diagnostic Solutions",
     description:
-      "Our state-of-the-art CT scanning technology ensures accurate diagnostics for better treatment.",
-    buttonLabel: "24/7 CT Scan Services",
-    buttonLink: "#testServices",
+      "Our advanced diagnostic services ensure accurate and reliable health assessments for better treatment.",
+    buttonLabel: "24/7 Diagnostic  Services",
+    buttonLink: "#diagnosticServices",
   },
   {
     id: "item3",
-    image: xray,
-    title: "Comprehensive X-Ray Imaging",
+    image: employees,
+    title: "Meet Our Dedicated Team",
     description:
-      "We provide high-resolution X-ray imaging for detailed analysis and quicker diagnosis.",
-    buttonLabel: "Get an X-Ray Now",
-    buttonLink: "#testServices",
+      "Our highly skilled and professional team is committed to providing top-quality healthcare services with compassion and expertise.",
+    buttonLabel: "Our Team",
+    buttonLink: "#ourEmployees",
   },
+
   {
     id: "item4",
     image: patho,
